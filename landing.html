@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>University Admission Tool - South Africa</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+
+    <style>
+        :root {
+            --primary: #610DDE;
+            --primary-dark: #4a0aad;
+            --secondary: #090979;
+            --dark: #150024;
+            --light: #f8f9fa;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(16deg, var(--dark) 0%, var(--secondary) 35%, var(--primary) 100%);
+            color: #333;
+            line-height: 1.6;
+        }
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 60px 0;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 50px;
+            padding: 12px 32px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(97, 13, 222, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(97, 13, 222, 0.4);
+        }
+        .section {
+            padding: 80px 0;
+        }
+        .about-section {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        .icon-box {
+            background: rgba(97, 13, 222, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        .icon-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(97, 13, 222, 0.1);
+        }
+        .icon-box i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        .features-section {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            color: white;
+            border-radius: 20px;
+        }
+        .footer {
+            background: rgba(21, 0, 36, 0.8);
+            color: rgba(255,255,255,0.7);
+            padding: 40px 0 20px;
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1.1rem;
+            }
+            .section {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>University Admission Probability Tool</h1>
+                <p>Get a calculated probability of admission to your top universities based on your matric results.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="section">
+        <div class="container">
+            <div class="about-section p-4 p-md-5">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h2 class="section-title">About Us</h2>
+                        <p class="lead">We are a South African-based team dedicated to helping matriculants make informed decisions about their university applications. Our University Admission Tool allows learners to select their top three universities, using their matric subjects and results to provide a calculated probability of admission.</p>
+                        <p class="lead">Our goal is to empower students with clear insights and improve their chances of gaining entry into higher education. All while helping you avoid unnecessary costs and efforts applying to universities that are unlikely to accept your applications.</p>
+                    </div>
+                </div>
+
+                <div class="row mt-5 g-4">
+                    <div class="col-md-4">
+                        <div class="icon-box text-center">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h4>Informed Decisions</h4>
+                            <p>Make smarter choices about where to apply based on your actual qualifications.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box text-center">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Probability Analysis</h4>
+                            <p>Get a calculated probability of admission to your chosen universities.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box text-center">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h4>Save Money</h4>
+                            <p>Avoid unnecessary application fees to universities where acceptance is unlikely.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section">
+        <div class="container">
+            <div class="features-section p-4 p-md-5">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h2 class="section-title text-white">How It Works</h2>
+                    </div>
+                </div>
+
+                <div class="row mt-5 g-4">
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mb-4" style="width: 80px; height: 80px;">
+                                <i class="fas fa-university fa-2x"></i>
+                            </div>
+                            <h4 class="text-white">1. Select Universities</h4>
+                            <p class="text-white-50">Choose up to 3 universities you are interested in applying to.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mb-4" style="width: 80px; height: 80px;">
+                                <i class="fas fa-book fa-2x"></i>
+                            </div>
+                            <h4 class="text-white">2. Add Subjects</h4>
+                            <p class="text-white-50">Enter your matric subjects and their achievement levels.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mb-4" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chart-pie fa-2x"></i>
+                            </div>
+                            <h4 class="text-white">3. Get Results</h4>
+                            <p class="text-white-50">Receive your personalized admission probability report.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Get Started Button -->
+                <div class="text-center mt-5">
+                    <button class="btn btn-primary btn-lg" id="getStartedBtn">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blank Modal -->
+    <div class="modal fade" id="blankModal" tabindex="-1" aria-labelledby="blankModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blankModalLabel">Get Started</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="blankModalBody">
+                    <!-- Content loaded via AJAX -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h4 class="text-white mb-4">University Admission Tool</h4>
+                    <p>Empowering South African students to make informed decisions about their higher education journey.</p>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-white mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">How It Works</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@admissiontool.co.za</li>
+                        <li><i class="fas fa-phone me-2"></i> +27 21 123 4567</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-white-10"/>
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="mb-0">© 2023 University Admission Tool. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white-50"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#getStartedBtn').on('click', function () {
+                $('#blankModalBody').html(''); // clear previous content
+                $.ajax({
+                    url: '', // insert your backend URL or HTML file here
+                    method: 'GET',
+                    success: function (response) {
+                        $('#blankModalBody').html(response);
+                    },
+                    error: function () {
+                        $('#blankModalBody').html('<p class="text-danger">Failed to load content.</p>');
+                    }
+                });
+                $('#blankModal').modal('show');
+            });
+        });
+    </script>
+</body>
+</html>
