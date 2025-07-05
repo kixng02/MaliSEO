@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University & Subject Selector</title>
+    <!-- Bootstrap CSS -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
+    <link rel="stylesheet" href="libs/CSS/style2.css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="libs/CSS/bootstrap.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
+     <link rel="stylesheet" href="libs/CSS/fonts.css">
+    <link rel="stylesheet" href="libs/CSS/style.css">
+
+</head>
+<body>
+<!-- university and subjects modal -->
+    <div class="container mt-5">
+        <h1> Welcome</h1>
+        <p>Start by choosing your preferred universities, then add your subjects.</p>
+        <br>
+        <!-- Button to trigger the university selection modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#universityModal">
+            Choose University
+        </button>
+        <p class="mt-3 text-muted">Universities Selected: <span id="selectedUniversityDisplay" class="fw-bold">None</span></p>
+
+        <!-- Button to add subjects, initially hidden -->
+        <button type="button" class="btn btn-primary mt-3" id="addSubjectsBtn" data-bs-toggle="modal" data-bs-target="#subjectModal">
+            Add Subjects
+        </button>
+
+        <!-- Added Subjects section, initially hidden -->
+        <div id="addedSubjectsSection">
+            <h4 class="mt-4">Added Subjects:</h4>
+            <div id="addedSubjectsDisplay" class="mt-2">
+                <!-- Subjects and their levels will be displayed here -->
+                <p class="text-muted" id="noSubjectsAdded">No subjects added yet.</p>
+            </div>
+            <!-- Submit button, initially hidden -->
+            <button type="button" class="btn btn-success mt-4" id="submitDataBtn">
+                Submit All Data
+            </button>
+        </div>
+    </div>
+
+    <!-- University Selection Modal Structure -->
+    <div class="modal fade" id="universityModal" tabindex="-1" aria-labelledby="universityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="universityModalLabel">Select Your University (Max 3)</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body modal-body-scrollable">
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+                        <!-- University Cards will be generated here -->
+                        <!-- University of Cape Town (UCT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UCT" data-fullname="University of Cape Town">
+                                <img src="logos/UCT.png" class="card-img-top" alt="University of Cape Town">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of Cape Town</h5>
+                                    <p class="card-text text-muted">UCT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of the Witwatersrand (Wits) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="Wits" data-fullname="University of the Witwatersrand">
+                                <img src="logos/Wits.png" class="card-img-top" alt="University of the Witwatersrand">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of the Witwatersrand</h5>
+                                    <p class="card-text text-muted">Wits</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Stellenbosch University (SU) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="SU" data-fullname="Stellenbosch University">
+                                <img src="logos/stellenbosch Uni.jpg" class="card-img-top" alt="Stellenbosch University">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Stellenbosch University</h5>
+                                    <p class="card-text text-muted">SU</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of Pretoria (UP) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UP" data-fullname="University of Pretoria">
+                                <img src="logos/UP.png" class="card-img-top" alt="University of Pretoria">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of Pretoria</h5>
+                                    <p class="card-text text-muted">UP</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of KwaZulu-Natal (UKZN) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UKZN" data-fullname="University of KwaZulu-Natal">
+                                <img src="logos/ukzn.png" class="card-img-top" alt="University of KwaZulu-Natal">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of KwaZulu-Natal</h5>
+                                    <p class="card-text text-muted">UKZN</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Rhodes University (RU) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="RU" data-fullname="Rhodes University">
+                                <img src="logos/Rhodes University.png" class="card-img-top" alt="Rhodes University">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Rhodes University</h5>
+                                    <p class="card-text text-muted">RU</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of Johannesburg (UJ) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UJ" data-fullname="University of Johannesburg">
+                                <img src="logos/UJ.png" class="card-img-top" alt="University of Johannesburg">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of Johannesburg</h5>
+                                    <p class="card-text text-muted">UJ</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Nelson Mandela University (NMU) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="NMU" data-fullname="Nelson Mandela University">
+                                <img src="logos/NMU.png" class="card-img-top" alt="Nelson Mandela University">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Nelson Mandela University</h5>
+                                    <p class="card-text text-muted">NMU</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of the Western Cape (UWC) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UWC" data-fullname="University of the Western Cape">
+                                <img src="logos/UWC.png" class="card-img-top" alt="University of the Western Cape">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of the Western Cape</h5>
+                                    <p class="card-text text-muted">UWC</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of Mpumalanga (UMP) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UMP" data-fullname="University of Mpumalanga">
+                                <img src="logos/UMP.png" class="card-img-top" alt="University of Mpumalanga">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of Mpumalanga</h5>
+                                    <p class="card-text text-muted">UMP</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of Limpopo (UL) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UL" data-fullname="University of Limpopo">
+                                <img src="logos/UL.png" class="card-img-top" alt="University of Limpopo">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of Limpopo</h5>
+                                    <p class="card-text text-muted">UL</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- North-West University (NWU) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="NWU" data-fullname="North-West University">
+                                <img src="logos/NWU.png" class="card-img-top" alt="North-West University">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">North-West University</h5>
+                                    <p class="card-text text-muted">NWU</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of Fort Hare (UFH) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UFH" data-fullname="University of Fort Hare">
+                                <img src="logos/forthere.png" class="card-img-top" alt="University of Fort Hare">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of Fort Hare</h5>
+                                    <p class="card-text text-muted">UFH</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Sol Plaatje University (SPU) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="SPU" data-fullname="Sol Plaatje University">
+                                <img src="logos/sol platje.png" class="card-img-top" alt="Sol Plaatje University">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Sol Plaatje University</h5>
+                                    <p class="card-text text-muted">SPU</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Walter Sisulu University (WSU) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="WSU" data-fullname="Walter Sisulu University">
+                                <img src="logos/WSU.png" class="card-img-top" alt="Walter Sisulu University">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Walter Sisulu University</h5>
+                                    <p class="card-text text-muted">WSU</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Tshwane University of Technology (TUT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="TUT" data-fullname="Tshwane University of Technology">
+                                <img src="logos/TUT.png" class="card-img-top" alt="Tshwane University of Technology">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Tshwane University of Technology</h5>
+                                    <p class="card-text text-muted">TUT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Durban University of Technology (DUT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="DUT" data-fullname="Durban University of Technology">
+                                <img src="logos/DUT.png" class="card-img-top" alt="Durban University of Technology">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Durban University of Technology</h5>
+                                    <p class="card-text text-muted">DUT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Cape Peninsula University of Technology (CPUT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="CPUT" data-fullname="Cape Peninsula University of Technology">
+                                <img src="logos/CPUT.png" class="card-img-top" alt="Cape Peninsula University of Technology">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Cape Peninsula University of Technology</h5>
+                                    <p class="card-text text-muted">CPUT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Vaal University of Technology (VUT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="VUT" data-fullname="Vaal University of Technology">
+                                <img src="logos/VUT.jpg" class="card-img-top" alt="Vaal University of Technology">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Vaal University of Technology</h5>
+                                    <p class="card-text text-muted">VUT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mangosuthu University of Technology (MUT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="MUT" data-fullname="Mangosuthu University of Technology">
+                                <img src="logos/MUT.jpg" class="card-img-top" alt="Mangosuthu University of Technology">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Mangosuthu University of Technology</h5>
+                                    <p class="card-text text-muted">MUT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Central University of Technology (CUT) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="CUT" data-fullname="Central University of Technology">
+                                <img src="logos/CUT.png" class="card-img-top" alt="Central University of Technology">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Central University of Technology</h5>
+                                    <p class="card-text text-muted">CUT</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- University of South Africa (UNISA) -->
+                        <div class="col">
+                            <div class="card h-100 shadow-sm card-clickable" id="UNISA" data-fullname="University of South Africa">
+                                <img src="logos/UNISA.png" class="card-img-top" alt="University of South Africa">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">University of South Africa</h5>
+                                    <p class="card-text text-muted">UNISA</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="confirmUniversitySelection">Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subject Input Modal Structure -->
+    <div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="subjectModalLabel">Add Subject Details</h5>
+                    <small class="text-muted d-block">Please select a subject only from the suggested list.</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body modal-body-scrollable">
+                    <form id="subjectForm" novalidate> <!-- Added novalidate to handle validation via JS -->
+                        <div class="mb-3">
+                            <label for="subjectName" class="form-label">Subject Name</label>
+                            <!-- Pattern updated to allow letters, spaces, and parentheses -->
+                            <input type="text" class="form-control" id="subjectName" placeholder="e.g., Mathematics" pattern="[a-zA-Z ()]+" title="Only letters, spaces, and parentheses are allowed" required>
+                            <div id="subjectNameFeedback" class="invalid-feedback">
+                                <!-- Dynamic feedback message -->
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subjectLevel" class="form-label">Level (1-7)</label>
+                            <select class="form-select" id="subjectLevel" required>
+                                <option value="" disabled selected>Select a level</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Please select a subject level.
+                            </div>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    <h6>Suggested Subjects:</h6>
+                    <div id="subjectSuggestions" class="d-flex flex-wrap">
+                        <!-- Subject suggestions will be dynamically added here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveSubjectBtn">Save Subject</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery (must be loaded before Bootstrap JS) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+
+    <script src="libs/js/jquery.min.js"></script>
+
+    <!-- Popper.js (Bootstrap dependency) -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" xintegrity="sha384-I7E8VVD/ismYTF4hNIPjVpZVfros4raPrJaUFLEOpQxHh7ZPKc/I8s6c/N" crossorigin="anonymous"></script> -->
+    <script src="libs/js/popper.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" xintegrity="sha384-0pUGZvbkm6XF6gxjEnlcooxfFLpSjFVzB7S7sHYgK7z7q3r9y2uKq/q6j+6B" crossorigin="anonymous"></script> -->
+    <script src="libs/js/bootstrap.min.js"></script>
+    <script src="libs/js/script.js"></script>
+
+   
+</body>
+</html>

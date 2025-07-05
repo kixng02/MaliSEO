@@ -1,19 +1,26 @@
  $(document).ready(function() {
-            // Array to store the TEMPORARY selections within the modal
+            
+    //Get started button is clicked
+            $('#getStartedBtn').on('click', function() {
+                window.location.href = 'selectUni.html';
+            });
+       
+    
+    // Array to store the TEMPORARY selections within the modal
             let tempSelectedUniversities = [];
             const maxUniversitySelections = 3; // Max universities user can select
 
-            // Array to store the CONFIRMED selections for the main page display and "Add Subjects" button
+    // Array to store the CONFIRMED selections for the main page display and "Add Subjects" button
             let confirmedSelectedUniversities = [];
 
-            // Array to store the subjects added by the user
+    // Array to store the subjects added by the user
             let addedSubjects = [];
             const maxSubjectSelections = 7; // Max subjects user can add
 
-            // Variable to keep track of the index of the subject being edited
+    // Variable to keep track of the index of the subject being edited
             let editingSubjectIndex = -1; // -1 means no subject is currently being edited
 
-            // List of suggested subjects (original case preserved for display, but lowercased for comparison)
+    // List of suggested subjects (original case preserved for display, but lowercased for comparison)
             const allSuggestedSubjects = [
                 "English Home Language", "Afrikaans Home Language", "isiZulu Home Language",
                 "isiXhosa Home Language", "Sepedi Home Language", "Setswana Home Language",
@@ -25,7 +32,7 @@
                 "Consumer Studies", "Hospitality Studies", "Tourism", "Dramatic Arts", "Music",
                 "Visual Arts", "Design", "Computer Applications Technology (CAT)", "Information Technology (IT)",
                 "Engineering Graphics and Design (EGD)", "Civil Technology", "Mechanical Technology",
-                "Electrical Technology", "Maritime Economics", "Aviation Studies", "Fashion Design"
+                "Electrical Technology", "Maritime Economics", "Aviation Studies", "Fashion Design", "Life Orientation (LO)"
             ];
             // Lowercased version for efficient comparison
             const allSuggestedSubjectsLower = allSuggestedSubjects.map(s => s.toLowerCase());

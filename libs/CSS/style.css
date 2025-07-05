@@ -1,3 +1,5 @@
+  
+        /*Styling index.html*/
         .card.selected {
             border: 3px solid #007bff; /* Blue border for selected card */
             box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.25) !important; /* Enhanced shadow */
@@ -150,4 +152,157 @@
         .modal-header .text-muted {
             font-size: 0.85em;
             margin-top: 5px;
+        }
+
+        /*selectUni*/
+        
+body {
+            font-family: "Inter", sans-serif;
+            background: #150024;
+background: -webkit-linear-gradient(16deg, rgba(21, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(97, 13, 222, 1) 100%);
+background: -moz-linear-gradient(16deg, rgba(21, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(97, 13, 222, 1) 100%);
+background: linear-gradient(16deg, rgba(21, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(97, 13, 222, 1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#150024", endColorstr="#610DDE", GradientType=0);
+
+            
+            height: 100vh; /* Ensure body takes full viewport height for cover to work effectively */
+            margin: 0; /* Remove default body margin */
+            display: flex; /* Use flexbox to center content */
+            justify-content: center; /* Center content horizontally */
+            align-items: center; /* Center content vertically */
+        }
+        .container {
+            background-color: #E0E6F7;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            margin-bottom: 50px;
+            max-width: 90%; /* Make container responsive */
+            width: 100%; /* Full width up to max-width */
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+        .card.selected {
+            border: 3px solid #007bff; /* Blue border for selected card */
+            box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.25) !important; /* Enhanced shadow */
+        }
+        .card-clickable {
+            cursor: pointer; /* Indicate that the card is clickable */
+            transition: all 0.2s ease-in-out; /* Smooth transition for hover/selection */
+            border-radius: 12px;
+            overflow: hidden; /* Ensures image rounded corners */
+        }
+        .card-clickable:hover {
+            transform: translateY(-3px); /* Slight lift on hover */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
+        /* Style for the card images */
+        .card-img-top {
+            width: 100%;
+            height: 150px; /* Fixed height for consistency */
+            object-fit: cover; /* Ensures images cover the area without distortion */
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+        /* Style for scrollable modal body */
+        .modal-body-scrollable {
+            max-height: calc(100vh - 200px); /* Adjust based on header/footer height and desired spacing */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        /* Initially hide the button */
+        #addSubjectsBtn {
+            display: none;
+        }
+        .subject-suggestion {
+            display: inline-block;
+            margin: 5px;
+            padding: 8px 12px;
+            background-color: #e2e6ea;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease-in-out;
+            white-space: nowrap; /* Prevent breaking into multiple lines */
+        }
+        .subject-suggestion:hover {
+            background-color: #d3d7db;
+        }
+        /* Validation feedback colors */
+        .form-control.is-invalid, .form-select.is-invalid {
+            border-color: #dc3545 !important; /* Red */
+        }
+        .form-control.is-valid, .form-select.is-valid {
+            border-color: #28a745 !important; /* Green */
+        }
+        /* Custom orange color for unrecognized subjects */
+        .form-control.is-unrecognized {
+            border-color: #fd7e14 !important; /* Orange */
+        }
+        .subject-display-item {
+            background-color: #f8f9fa;
+            border: 1px solid #e2e6ea;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .subject-display-item:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+        .subject-display-item .badge {
+            font-size: 0.85em;
+            padding: 6px 10px;
+            margin-left: 15px;
+            border-radius: 15px;
+        }
+        .subject-actions button {
+            margin-left: 8px;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85em;
+        }
+        /* Initially hide the added subjects section */
+        #addedSubjectsSection {
+            display: none;
+        }
+        /* Initially hide the submit button */
+        #submitDataBtn {
+            display: none;
+        }
+
+        .modal-header .text-muted {
+            font-size: 0.85em;
+            margin-top: 5px;
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
         }

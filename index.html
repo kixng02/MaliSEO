@@ -1,912 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University & Subject Selector</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>University Admission Tool - South Africa</title>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
- <style>
-body {
-            font-family: "Inter", sans-serif;
-            background: #150024;
-background: -webkit-linear-gradient(16deg, rgba(21, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(97, 13, 222, 1) 100%);
-background: -moz-linear-gradient(16deg, rgba(21, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(97, 13, 222, 1) 100%);
-background: linear-gradient(16deg, rgba(21, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 35%, rgba(97, 13, 222, 1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#150024", endColorstr="#610DDE", GradientType=0);
 
-            
-            height: 100vh; /* Ensure body takes full viewport height for cover to work effectively */
-            margin: 0; /* Remove default body margin */
-            display: flex; /* Use flexbox to center content */
-            justify-content: center; /* Center content horizontally */
-            align-items: center; /* Center content vertically */
-        }
-        .container {
-            background-color: #E0E6F7;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-            margin-bottom: 50px;
-            max-width: 90%; /* Make container responsive */
-            width: 100%; /* Full width up to max-width */
-        }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
-        }
-        .card.selected {
-            border: 3px solid #007bff; /* Blue border for selected card */
-            box-shadow: 0 0.5rem 1rem rgba(0, 123, 255, 0.25) !important; /* Enhanced shadow */
-        }
-        .card-clickable {
-            cursor: pointer; /* Indicate that the card is clickable */
-            transition: all 0.2s ease-in-out; /* Smooth transition for hover/selection */
-            border-radius: 12px;
-            overflow: hidden; /* Ensures image rounded corners */
-        }
-        .card-clickable:hover {
-            transform: translateY(-3px); /* Slight lift on hover */
-            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-        }
-        /* Style for the card images */
-        .card-img-top {
-            width: 100%;
-            height: 150px; /* Fixed height for consistency */
-            object-fit: cover; /* Ensures images cover the area without distortion */
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-        /* Style for scrollable modal body */
-        .modal-body-scrollable {
-            max-height: calc(100vh - 200px); /* Adjust based on header/footer height and desired spacing */
-            overflow-y: auto; /* Enable vertical scrolling */
-        }
-        /* Initially hide the button */
-        #addSubjectsBtn {
-            display: none;
-        }
-        .subject-suggestion {
-            display: inline-block;
-            margin: 5px;
-            padding: 8px 12px;
-            background-color: #e2e6ea;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: background-color 0.2s ease-in-out;
-            white-space: nowrap; /* Prevent breaking into multiple lines */
-        }
-        .subject-suggestion:hover {
-            background-color: #d3d7db;
-        }
-        /* Validation feedback colors */
-        .form-control.is-invalid, .form-select.is-invalid {
-            border-color: #dc3545 !important; /* Red */
-        }
-        .form-control.is-valid, .form-select.is-valid {
-            border-color: #28a745 !important; /* Green */
-        }
-        /* Custom orange color for unrecognized subjects */
-        .form-control.is-unrecognized {
-            border-color: #fd7e14 !important; /* Orange */
-        }
-        .subject-display-item {
-            background-color: #f8f9fa;
-            border: 1px solid #e2e6ea;
-            border-radius: 8px;
-            padding: 10px 15px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-        }
-        .subject-display-item:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-        .subject-display-item .badge {
-            font-size: 0.85em;
-            padding: 6px 10px;
-            margin-left: 15px;
-            border-radius: 15px;
-        }
-        .subject-actions button {
-            margin-left: 8px;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 0.85em;
-        }
-        /* Initially hide the added subjects section */
-        #addedSubjectsSection {
-            display: none;
-        }
-        /* Initially hide the submit button */
-        #submitDataBtn {
-            display: none;
-        }
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="libs/CSS/style2.css">
 
-        .modal-header .text-muted {
-            font-size: 0.85em;
-            margin-top: 5px;
-        }
 
-        /* Media queries for responsiveness */
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-                margin-top: 20px;
-                margin-bottom: 20px;
-            }
-        }
-    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1>Welcome!</h1>
-        <p>Start by choosing your preferred universities, then add your subjects.</p>
-        <br>
-        <!-- Button to trigger the university selection modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#universityModal">
-            Choose University
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">University Admission Calculator</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <p class="mt-3 text-muted">Universities Selected: <span id="selectedUniversityDisplay" class="fw-bold">None</span></p>
-
-        <!-- Button to add subjects, initially hidden -->
-        <button type="button" class="btn btn-primary mt-3" id="addSubjectsBtn" data-bs-toggle="modal" data-bs-target="#subjectModal">
-            Add Subjects
-        </button>
-
-        <!-- Added Subjects section, initially hidden -->
-        <div id="addedSubjectsSection">
-            <h4 class="mt-4">Added Subjects:</h4>
-            <div id="addedSubjectsDisplay" class="mt-2">
-                <!-- Subjects and their levels will be displayed here -->
-                <p class="text-muted" id="noSubjectsAdded">No subjects added yet.</p>
-            </div>
-            <!-- Submit button, initially hidden -->
-            <button type="button" class="btn btn-success mt-4" id="submitDataBtn">
-                Submit All Data
-            </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="index.html">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about-us">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#how-it-works">How It Works</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
         </div>
     </div>
+</nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>University Admission Probability Tool</h1>
+                <p>Get a calculated probability of admission to your top universities based on your matric results.</p>
+            </div>
+        </div>
+    </section>
 
-    <!-- University Selection Modal Structure -->
-    <div class="modal fade" id="universityModal" tabindex="-1" aria-labelledby="universityModalLabel" aria-hidden="true">
+    <!-- About Us Section -->
+    <section class="section" id="about-us">
+        <div class="container">
+            <div class="about-section p-4 p-md-5">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h2 class="section-title">About Us</h2>
+                        <p class="lead">We are a South African-based team dedicated to helping matriculants make informed decisions about their university applications. Our University Admission Tool allows learners to select their top three universities, using their matric subjects and results to provide a calculated probability of admission.</p>
+                        <p class="lead">Our goal is to empower students with clear insights and improve their chances of gaining entry into higher education. All while helping you avoid unnecessary costs and efforts applying to universities that are unlikely to accept your applications.</p>
+                    </div>
+                </div>
+
+                <div class="row mt-5 g-4">
+                    <div class="col-md-4">
+                        <div class="icon-box text-center">
+                            <i class="fas fa-graduation-cap"></i>
+                            <h4>Informed Decisions</h4>
+                            <p>Make smarter choices about where to apply based on your actual qualifications.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box text-center">
+                            <i class="fas fa-chart-line"></i>
+                            <h4>Probability Analysis</h4>
+                            <p>Get a calculated probability of admission to your chosen universities.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="icon-box text-center">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <h4>Save Money</h4>
+                            <p>Avoid unnecessary application fees to universities where acceptance is unlikely.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="section" id="how-it-works">
+        <div class="container">
+            <div class="features-section p-4 p-md-5">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto text-center">
+                        <h2 class="section-title text-white">How It Works</h2>
+                    </div>
+                </div>
+
+                <div class="row mt-5 g-4">
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mb-4" style="width: 80px; height: 80px;">
+                                <i class="fas fa-university fa-2x"></i>
+                            </div>
+                            <h4 class="text-white">1. Select Universities</h4>
+                            <p class="text-white-50">Choose up to 3 universities you are interested in applying to.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mb-4" style="width: 80px; height: 80px;">
+                                <i class="fas fa-book fa-2x"></i>
+                            </div>
+                            <h4 class="text-white">2. Add Subjects</h4>
+                            <p class="text-white-50">Enter your matric subjects and their achievement levels.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-4">
+                            <div class="d-inline-flex align-items-center justify-content-center bg-white text-primary rounded-circle mb-4" style="width: 80px; height: 80px;">
+                                <i class="fas fa-chart-pie fa-2x"></i>
+                            </div>
+                            <h4 class="text-white">3. Get Results</h4>
+                            <p class="text-white-50">Receive your personalized admission probability report.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Get Started Button -->
+                <div class="text-center mt-5">
+                    <button class="btn btn-primary btn-lg" id="getStartedBtn">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Blank Modal -->
+    <div class="modal fade" id="blankModal" tabindex="-1" aria-labelledby="blankModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="universityModalLabel">Select Your University (Max 3)</h5>
+                    <h5 class="modal-title" id="blankModalLabel">Get Started</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body modal-body-scrollable">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-                        <!-- University Cards will be generated here -->
-                        <!-- University of Cape Town (UCT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UCT" data-fullname="University of Cape Town">
-                                <img src="logos/UCT.png" class="card-img-top" alt="University of Cape Town">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Cape Town</h5>
-                                    <p class="card-text text-muted">UCT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of the Witwatersrand (Wits) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="Wits" data-fullname="University of the Witwatersrand">
-                                <img src="logos/Wits.png" class="card-img-top" alt="University of the Witwatersrand">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of the Witwatersrand</h5>
-                                    <p class="card-text text-muted">Wits</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Stellenbosch University (SU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="SU" data-fullname="Stellenbosch University">
-                                <img src="logos/stellenbosch Uni.jpg" class="card-img-top" alt="Stellenbosch University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Stellenbosch University</h5>
-                                    <p class="card-text text-muted">SU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Pretoria (UP) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UP" data-fullname="University of Pretoria">
-                                <img src="logos/UP.png" class="card-img-top" alt="University of Pretoria">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Pretoria</h5>
-                                    <p class="card-text text-muted">UP</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of KwaZulu-Natal (UKZN) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UKZN" data-fullname="University of KwaZulu-Natal">
-                                <img src="logos/ukzn.png" class="card-img-top" alt="University of KwaZulu-Natal">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of KwaZulu-Natal</h5>
-                                    <p class="card-text text-muted">UKZN</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Rhodes University (RU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="RU" data-fullname="Rhodes University">
-                                <img src="logos/Rhodes University.png" class="card-img-top" alt="Rhodes University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Rhodes University</h5>
-                                    <p class="card-text text-muted">RU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Johannesburg (UJ) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UJ" data-fullname="University of Johannesburg">
-                                <img src="logos/UJ.png" class="card-img-top" alt="University of Johannesburg">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Johannesburg</h5>
-                                    <p class="card-text text-muted">UJ</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Nelson Mandela University (NMU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="NMU" data-fullname="Nelson Mandela University">
-                                <img src="logos/NMU.png" class="card-img-top" alt="Nelson Mandela University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Nelson Mandela University</h5>
-                                    <p class="card-text text-muted">NMU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of the Western Cape (UWC) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UWC" data-fullname="University of the Western Cape">
-                                <img src="logos/UWC.png" class="card-img-top" alt="University of the Western Cape">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of the Western Cape</h5>
-                                    <p class="card-text text-muted">UWC</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Mpumalanga (UMP) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UMP" data-fullname="University of Mpumalanga">
-                                <img src="logos/UMP.png" class="card-img-top" alt="University of Mpumalanga">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Mpumalanga</h5>
-                                    <p class="card-text text-muted">UMP</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Limpopo (UL) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UL" data-fullname="University of Limpopo">
-                                <img src="logos/UL.png" class="card-img-top" alt="University of Limpopo">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Limpopo</h5>
-                                    <p class="card-text text-muted">UL</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- North-West University (NWU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="NWU" data-fullname="North-West University">
-                                <img src="logos/NWU.png" class="card-img-top" alt="North-West University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">North-West University</h5>
-                                    <p class="card-text text-muted">NWU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Fort Hare (UFH) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UFH" data-fullname="University of Fort Hare">
-                                <img src="logos/forthere.png" class="card-img-top" alt="University of Fort Hare">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Fort Hare</h5>
-                                    <p class="card-text text-muted">UFH</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Sol Plaatje University (SPU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="SPU" data-fullname="Sol Plaatje University">
-                                <img src="logos/sol platje.png" class="card-img-top" alt="Sol Plaatje University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Sol Plaatje University</h5>
-                                    <p class="card-text text-muted">SPU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Walter Sisulu University (WSU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="WSU" data-fullname="Walter Sisulu University">
-                                <img src="logos/WSU.png" class="card-img-top" alt="Walter Sisulu University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Walter Sisulu University</h5>
-                                    <p class="card-text text-muted">WSU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Tshwane University of Technology (TUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="TUT" data-fullname="Tshwane University of Technology">
-                                <img src="logos/TUT.png" class="card-img-top" alt="Tshwane University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Tshwane University of Technology</h5>
-                                    <p class="card-text text-muted">TUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Durban University of Technology (DUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="DUT" data-fullname="Durban University of Technology">
-                                <img src="logos/DUT.png" class="card-img-top" alt="Durban University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Durban University of Technology</h5>
-                                    <p class="card-text text-muted">DUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Cape Peninsula University of Technology (CPUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="CPUT" data-fullname="Cape Peninsula University of Technology">
-                                <img src="logos/CPUT.png" class="card-img-top" alt="Cape Peninsula University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Cape Peninsula University of Technology</h5>
-                                    <p class="card-text text-muted">CPUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Vaal University of Technology (VUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="VUT" data-fullname="Vaal University of Technology">
-                                <img src="logos/VUT.jpg" class="card-img-top" alt="Vaal University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Vaal University of Technology</h5>
-                                    <p class="card-text text-muted">VUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Mangosuthu University of Technology (MUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="MUT" data-fullname="Mangosuthu University of Technology">
-                                <img src="logos/MUT.jpg" class="card-img-top" alt="Mangosuthu University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Mangosuthu University of Technology</h5>
-                                    <p class="card-text text-muted">MUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Central University of Technology (CUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="CUT" data-fullname="Central University of Technology">
-                                <img src="logos/CUT.png" class="card-img-top" alt="Central University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Central University of Technology</h5>
-                                    <p class="card-text text-muted">CUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of South Africa (UNISA) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UNISA" data-fullname="University of South Africa">
-                                <img src="logos/UNISA.png" class="card-img-top" alt="University of South Africa">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of South Africa</h5>
-                                    <p class="card-text text-muted">UNISA</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="confirmUniversitySelection">Confirm Selection</button>
+                <div class="modal-body" id="blankModalBody">
+                    <!-- Content loaded via AJAX -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Subject Input Modal Structure -->
-    <div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="subjectModalLabel">Add Subject Details</h5>
-                    <small class="text-muted d-block">Please select a subject only from the suggested list.</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <!-- Footer -->
+    <footer class="footer"  id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <h4 class="text-white mb-4">University Admission Probability Tool (UAPT)</h4>
+                    <p>Empowering South African students to make informed decisions about their higher education journey.</p>
                 </div>
-                <div class="modal-body modal-body-scrollable">
-                    <form id="subjectForm" novalidate> <!-- Added novalidate to handle validation via JS -->
-                        <div class="mb-3">
-                            <label for="subjectName" class="form-label">Subject Name</label>
-                            <!-- Pattern updated to allow letters, spaces, and parentheses -->
-                            <input type="text" class="form-control" id="subjectName" placeholder="e.g., Mathematics" pattern="[a-zA-Z ()]+" title="Only letters, spaces, and parentheses are allowed" required>
-                            <div id="subjectNameFeedback" class="invalid-feedback">
-                                <!-- Dynamic feedback message -->
-                            </div>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="subjectLevel" class="form-label">Level (1-7)</label>
-                            <select class="form-select" id="subjectLevel" required>
-                                <option value="" disabled selected>Select a level</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select a subject level.
-                            </div>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                    </form>
-                    <hr>
-                    <h6>Suggested Subjects:</h6>
-                    <div id="subjectSuggestions" class="d-flex flex-wrap">
-                        <!-- Subject suggestions will be dynamically added here -->
-                    </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="text-white mb-4">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">How It Works</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Contact</a></li>
+                    </ul>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveSubjectBtn">Save Subject</button>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white mb-4">Contact</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@UAPT.co.za</li>
+                        <li><i class="fas fa-phone me-2"></i> +27 767675948</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-white-10"/>
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-3 mb-md-0">
+                    <p class="mb-0">© 2025 University Admission Tool. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-white-50 me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white-50"><i class="fab fa-linkedin-in"></i></a>
                 </div>
             </div>
         </div>
-    </div>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+     <script src="libs/js/jquery-3.7.1.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> -->
+     <script src="libs/js/bootstrap.bundle.min.js"></script>
+    <script src="libs/js/script.js"></script>
 
-    <!-- jQuery (must be loaded before Bootstrap JS) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <!-- Popper.js (Bootstrap dependency) -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" xintegrity="sha384-I7E8VVD/ismYTF4hNIPjVpZVfros4raPrJaUFLEOpQxHh7ZPKc/I8s6c/N" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" xintegrity="sha384-0pUGZvbkm6XF6gxjEnlcooxfFLpSjFVzB7S7sHYgK7z7q3r9y2uKq/q6j+6B" crossorigin="anonymous"></script>
-
-    <script>
-        $(document).ready(function() {
-            // Array to store the TEMPORARY selections within the modal
-            let tempSelectedUniversities = [];
-            const maxUniversitySelections = 3; // Max universities user can select
-
-            // Array to store the CONFIRMED selections for the main page display and "Add Subjects" button
-            let confirmedSelectedUniversities = [];
-
-            // Array to store the subjects added by the user
-            let addedSubjects = [];
-            const maxSubjectSelections = 7; // Max subjects user can add
-
-            // Variable to keep track of the index of the subject being edited
-            let editingSubjectIndex = -1; // -1 means no subject is currently being edited
-
-            // List of suggested subjects (original case preserved for display, but lowercased for comparison)
-            const allSuggestedSubjects = [
-                "English Home Language", "Afrikaans Home Language", "isiZulu Home Language",
-                "isiXhosa Home Language", "Sepedi Home Language", "Setswana Home Language",
-                "Sesotho Home Language", "Xitsonga Home Language", "Tshivenda Home Language",
-                "siSwati Home Language", "isiNdebele Home Language", "English First Additional Language",
-                "Afrikaans First Additional Language", "isiZulu First Additional Language", "Mathematics",
-                "Mathematical Literacy", "Physical Sciences", "Life Sciences", "Geography", "History",
-                "Agricultural Sciences", "Accounting", "Business Studies", "Economics", "Religion Studies",
-                "Consumer Studies", "Hospitality Studies", "Tourism", "Dramatic Arts", "Music",
-                "Visual Arts", "Design", "Computer Applications Technology (CAT)", "Information Technology (IT)",
-                "Engineering Graphics and Design (EGD)", "Civil Technology", "Mechanical Technology",
-                "Electrical Technology", "Maritime Economics", "Aviation Studies", "Fashion Design"
-            ];
-            // Lowercased version for efficient comparison
-            const allSuggestedSubjectsLower = allSuggestedSubjects.map(s => s.toLowerCase());
-
-            // Function to update the visibility of the "Add Subjects" button
-            function updateAddSubjectsButtonVisibility() {
-                if (confirmedSelectedUniversities.length > 0) {
-                    $('#addSubjectsBtn').show(); // Show the button
-                } else {
-                    $('#addSubjectsBtn').hide(); // Hide the button
-                }
-            }
-
-            // Function to update the visibility of the "Submit All Data" button
-            function updateSubmitButtonVisibility() {
-                if (addedSubjects.length >= maxSubjectSelections) {
-                    $('#submitDataBtn').show(); // Show the submit button
-                } else {
-                    $('#submitDataBtn').hide(); // Hide the submit button
-                }
-            }
-
-            // Function to render subject suggestions based on a provided list (or all suggestions if none provided)
-            function renderSubjectSuggestions(subjectsToRender = allSuggestedSubjects) {
-                const $suggestionsContainer = $('#subjectSuggestions');
-                $suggestionsContainer.empty(); // Clear previous suggestions
-
-                if (subjectsToRender.length === 0) {
-                    $suggestionsContainer.append($('<p class="text-muted">No matching suggestions.</p>'));
-                    return;
-                }
-
-                subjectsToRender.forEach(subject => {
-                    const $suggestion = $('<span class="subject-suggestion btn btn-light btn-sm"></span>').text(subject);
-                    $suggestion.on('click', function() {
-                        $('#subjectName').val($(this).text()).trigger('input'); // Trigger input to update validation
-                    });
-                    $suggestionsContainer.append($suggestion);
-                });
-            }
-
-            // Function to display added subjects on the main page
-            function displayAddedSubjects() {
-                const $addedSubjectsSection = $('#addedSubjectsSection');
-                const $displayContainer = $('#addedSubjectsDisplay');
-                $displayContainer.empty(); // Clear previous display
-
-                if (addedSubjects.length === 0) {
-                    $addedSubjectsSection.hide(); // Hide the entire section
-                    $displayContainer.append($('<p class="text-muted" id="noSubjectsAdded">No subjects added yet.</p>'));
-                } else {
-                    $addedSubjectsSection.show(); // Show the entire section
-                    addedSubjects.forEach((subject, index) => {
-                        const subjectItem = `
-                            <div class="subject-display-item">
-                                <span>${subject.name}</span>
-                                <div class="subject-actions">
-                                    <span class="badge bg-primary">Level: ${subject.level}</span>
-                                    <button type="button" class="btn btn-sm btn-info edit-subject-btn" data-index="${index}">Edit</button>
-                                    <button type="button" class="btn btn-sm btn-danger delete-subject-btn" data-index="${index}">Delete</button>
-                                </div>
-                            </div>
-                        `;
-                        $displayContainer.append(subjectItem);
-                    });
-                    // Attach event listeners after elements are added to DOM
-                    $('.edit-subject-btn').on('click', function() {
-                        const index = $(this).data('index');
-                        editSubject(index);
-                    });
-                    $('.delete-subject-btn').on('click', function() {
-                        const index = $(this).data('index');
-                        deleteSubject(index);
-                    });
-                }
-                updateSubmitButtonVisibility(); // Update submit button visibility after subjects are displayed
-            }
-
-            // Function to delete a subject
-            function deleteSubject(index) {
-                addedSubjects.splice(index, 1); // Remove 1 element at the given index
-                displayAddedSubjects(); // Re-render the list
-            }
-
-            // Function to edit a subject
-            function editSubject(index) {
-                editingSubjectIndex = index; // Store the index of the subject being edited
-                const subjectToEdit = addedSubjects[index];
-
-                // Populate the modal fields with the subject's current data
-                $('#subjectName').val(subjectToEdit.name).trigger('input'); // Trigger input for validation/filtering
-                $('#subjectLevel').val(subjectToEdit.level).trigger('change'); // Trigger change for validation
-
-                // Open the subject modal
-                $('#subjectModal').modal('show');
-            }
-
-
-            // Add click event listener to each card within the university modal
-            $('.card-clickable').on('click', function() {
-                const universityId = $(this).attr('id');
-                const universityFullName = $(this).data('fullname');
-
-                // Check if the card is already selected (in the temporary array)
-                const isSelected = tempSelectedUniversities.some(uni => uni.id === universityId);
-
-                if (isSelected) {
-                    // If selected, deselect it
-                    $(this).removeClass('selected');
-                    tempSelectedUniversities = tempSelectedUniversities.filter(uni => uni.id !== universityId);
-                } else {
-                    // If not selected and we haven't reached the max selections
-                    if (tempSelectedUniversities.length < maxUniversitySelections) {
-                        $(this).addClass('selected');
-                        tempSelectedUniversities.push({ id: universityId, name: universityFullName });
-                    } else {
-                        // Provide feedback (e.g., via console log)
-                        console.log(`You can select a maximum of ${maxUniversitySelections} universities.`);
-                        return; // Prevent further action if max selected
-                    }
-                }
-
-                // Log temporary selections (for debugging)
-                console.log("Temporary selected in modal:", tempSelectedUniversities.map(uni => uni.id).join(', '));
-
-                // If 3 universities are selected in the modal, automatically confirm and close
-                if (tempSelectedUniversities.length === maxUniversitySelections) {
-                    // Copy temporary selections to confirmed selections
-                    confirmedSelectedUniversities = [...tempSelectedUniversities];
-
-                    // Update the display on the main page
-                    const displayNames = confirmedSelectedUniversities.map(uni => uni.name || uni.id);
-                    $('#selectedUniversityDisplay').text(displayNames.join(', '));
-
-                    // Update the "Add Subjects" button visibility
-                    updateAddSubjectsButtonVisibility();
-
-                    // Close the university modal
-                    $('#universityModal').modal('hide');
-                }
-            });
-
-            // Handle the "Confirm Selection" button click in the university modal footer
-            $('#confirmUniversitySelection').on('click', function() {
-                // Copy temporary selections to confirmed selections
-                confirmedSelectedUniversities = [...tempSelectedUniversities];
-
-                // Update the display on the main page
-                const displayNames = confirmedSelectedUniversities.map(uni => uni.name || uni.id);
-                $('#selectedUniversityDisplay').text(displayNames.length > 0 ? displayNames.join(', ') : 'None');
-
-                // Update the "Add Subjects" button visibility
-                updateAddSubjectsButtonVisibility();
-
-                // Close the university modal
-                $('#universityModal').modal('hide');
-                console.log("Confirmed selections:", confirmedSelectedUniversities.map(uni => uni.id).join(', '));
-            });
-
-            // Handle university modal opening
-            $('#universityModal').on('show.bs.modal', function () {
-                // When the modal is about to be shown, populate tempSelectedUniversities with confirmed ones
-                // so previous selections are visually present for editing.
-                tempSelectedUniversities = [...confirmedSelectedUniversities];
-
-                // Visually mark selected cards inside the modal based on tempSelectedUniversities
-                $('.card-clickable').removeClass('selected'); // Clear all selections first
-                tempSelectedUniversities.forEach(uni => {
-                    $(`#${uni.id}`).addClass('selected');
-                });
-            });
-
-
-            // Handle university modal closing
-            $('#universityModal').on('hidden.bs.modal', function () {
-                // Clear temporary selections when modal is hidden, without affecting confirmed ones
-                tempSelectedUniversities = [];
-                // Ensure all cards are deselected visually for next modal open
-                $('.card-clickable').removeClass('selected');
-            });
-
-            // Function to validate subject name
-            function validateSubjectName(inputElement) {
-                const subjectNameInput = $(inputElement);
-                const subjectNameFeedback = $('#subjectNameFeedback');
-                const subjectName = subjectNameInput.val().trim();
-                const subjectNameLower = subjectName.toLowerCase();
-
-                subjectNameInput.removeClass('is-valid is-invalid is-unrecognized'); // Clear previous states
-
-                if (subjectName === '') {
-                    subjectNameInput.addClass('is-invalid');
-                    subjectNameFeedback.text('Subject name cannot be empty.');
-                    return false;
-                }
-
-                // Updated pattern to allow letters, spaces, and parentheses
-                const pattern = /^[a-zA-Z ()]+$/; // Regex for letters, spaces, and parentheses
-                if (!pattern.test(subjectName)) {
-                    subjectNameInput.addClass('is-invalid');
-                    subjectNameFeedback.text('Only letters, spaces, and parentheses are allowed for the subject name.');
-                    return false;
-                }
-
-
-                // Check for exact match in the lowercased list
-                if (allSuggestedSubjectsLower.includes(subjectNameLower)) {
-                    subjectNameInput.addClass('is-valid');
-                    subjectNameFeedback.text('Looks good!');
-                    return true;
-                } else {
-                    // Not an exact match, mark as unrecognized (orange)
-                    subjectNameInput.addClass('is-unrecognized'); // Apply orange border class
-                    subjectNameFeedback.text('Subject is not recognized. Please select only from the suggested list.');
-                    return false;
-                }
-            }
-
-
-            // Handle Save Subject button click in the Subject Modal
-            $('#saveSubjectBtn').on('click', function() {
-                const subjectNameInput = $('#subjectName');
-                const subjectLevelInput = $('#subjectLevel');
-                const subjectLevel = subjectLevelInput.val();
-                const subjectName = subjectNameInput.val().trim();
-                const subjectNameLower = subjectName.toLowerCase();
-
-                let isFormValid = true;
-
-                // Validate subject name using the new function
-                if (!validateSubjectName(subjectNameInput)) {
-                    isFormValid = false;
-                }
-
-                // Validate subject level
-                if (!subjectLevel) { // Check if level is selected
-                    subjectLevelInput.addClass('is-invalid').removeClass('is-valid');
-                    isFormValid = false;
-                } else {
-                    subjectLevelInput.addClass('is-valid').removeClass('is-invalid');
-                }
-
-                if (isFormValid) {
-                    // Check for duplicate subject names (case-insensitive)
-                    const isDuplicate = addedSubjects.some((subject, idx) =>
-                        subject.name.toLowerCase() === subjectNameLower && idx !== editingSubjectIndex
-                    );
-
-                    if (isDuplicate) {
-                        alert(`Subject "${subjectName}" has already been added. Please enter a unique subject.`);
-                        subjectNameInput.addClass('is-invalid is-unrecognized'); // Mark as invalid/unrecognized
-                        $('#subjectNameFeedback').text('This subject has already been added.');
-                        return; // Stop function execution
-                    }
-
-                    // Prevent adding more subjects if already at max and not editing
-                    if (addedSubjects.length >= maxSubjectSelections && editingSubjectIndex === -1) {
-                        alert(`You can only add a maximum of ${maxSubjectSelections} subjects.`);
-                        return; // Stop function execution
-                    }
-
-                    console.log(`Subject Added: ${subjectName}, Level: ${subjectLevel}`);
-
-                    // Check if we are editing an existing subject or adding a new one
-                    if (editingSubjectIndex !== -1) {
-                        // Update existing subject
-                        addedSubjects[editingSubjectIndex] = { name: subjectName, level: subjectLevel };
-                        editingSubjectIndex = -1; // Reset editing state
-                    } else {
-                        // Add new subject
-                        addedSubjects.push({ name: subjectName, level: subjectLevel });
-                    }
-
-                    displayAddedSubjects(); // Update the display on the main page
-
-                    // Clear the form fields and remove validation feedback
-                    subjectNameInput.val('').removeClass('is-valid is-invalid is-unrecognized');
-                    subjectLevelInput.val('').find('option:first').prop('selected', true).removeClass('is-valid is-invalid');
-                    $('#subjectNameFeedback').text(''); // Clear feedback message
-
-                    // Close the subject modal
-                    $('#subjectModal').modal('hide');
-                } else {
-                    console.log("Please correct the highlighted fields.");
-                    // Bootstrap's invalid-feedback messages will appear
-                }
-            });
-
-            // Real-time validation and filtering for subjectName
-            $('#subjectName').on('input', function() {
-                const inputValue = $(this).val().trim().toLowerCase();
-
-                // Filter suggestions based on input (case-insensitive)
-                const filteredSubjects = allSuggestedSubjects.filter(subject =>
-                    subject.toLowerCase().includes(inputValue)
-                );
-                renderSubjectSuggestions(filteredSubjects); // Render filtered suggestions
-
-                // Apply validation styling using the new function
-                validateSubjectName(this);
-            });
-
-            // Validation feedback for subjectLevel
-            $('#subjectLevel').on('change', function() {
-                if (this.checkValidity() && $(this).val() !== '') {
-                    $(this).addClass('is-valid').removeClass('is-invalid');
-                } else {
-                    $(this).addClass('is-invalid').removeClass('is-valid');
-                }
-            });
-
-            // Render suggestions and reset form when the subject modal is shown
-            $('#subjectModal').on('show.bs.modal', function () {
-                renderSubjectSuggestions(); // Render all suggestions initially
-                // Clear form fields and validation feedback when modal is opened for a new entry
-                $('#subjectForm')[0].reset(); // Reset form to clear inputs and dropdown
-                $('#subjectName').removeClass('is-valid is-invalid is-unrecognized');
-                $('#subjectLevel').removeClass('is-valid is-invalid');
-                $('#subjectNameFeedback').text(''); // Clear specific feedback message
-                editingSubjectIndex = -1; // Ensure editing state is reset when opening for new entry
-            });
-
-            // Handle Submit All Data button click
-            $('#submitDataBtn').on('click', function() {
-                // Ensure all necessary data is available
-                if (confirmedSelectedUniversities.length === 0) {
-                    alert("Please select at least one university before submitting.");
-                    return;
-                }
-                if (addedSubjects.length !== maxSubjectSelections) { // Changed to strict equality
-                    alert(`Please add exactly ${maxSubjectSelections} subjects before submitting.`);
-                    return;
-                }
-
-                const dataToSend = {
-                    universities: confirmedSelectedUniversities,
-                    subjects: addedSubjects
-                };
-
-                console.log("Data to send to API:", dataToSend);
-
-                // --- AJAX CALL PLACEHOLDER ---
-                // Replace 'YOUR_API_ENDPOINT_HERE' with your actual API endpoint
-                // and configure method, headers, and body as needed by your API.
-                fetch('YOUR_API_ENDPOINT_HERE', {
-                    method: 'POST', // Or 'PUT', 'GET', etc.
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Add any other headers like authorization tokens here
-                        // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
-                    },
-                    body: JSON.stringify(dataToSend)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        // Handle HTTP errors
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json(); // Or response.text() if your API doesn't return JSON
-                })
-                .then(data => {
-                    console.log('API response:', data);
-                    alert('Data successfully submitted!');
-                    // Optionally, clear the form or provide further feedback to the user
-                    confirmedSelectedUniversities = [];
-                    addedSubjects = [];
-                    updateAddSubjectsButtonVisibility();
-                    displayAddedSubjects();
-                    $('#selectedUniversityDisplay').text('None');
-                })
-                .catch(error => {
-                    console.error('Error submitting data:', error);
-                    alert('Failed to submit data. Please try again. Error: ' + error.message);
-                });
-            });
-
-
-            // Initial calls on page load
-            updateAddSubjectsButtonVisibility();
-            displayAddedSubjects(); // Initialize subject display and submit button visibility
-        });
     </script>
 </body>
 </html>
