@@ -3,392 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University & Subject Selector</title>
+    <title>Matric Results Entry</title>
     <!-- Bootstrap CSS -->
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" xintegrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"> -->
-    <link rel="stylesheet" href="libs/CSS/style2.css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
-    <link rel="stylesheet" href="libs/CSS/bootstrap.min.css">
-
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
-     <link rel="stylesheet" href="libs/CSS/fonts.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="libs/CSS/style.css">
-
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-graduation-cap me-2"></i> University Admission Probability Tool (UAPT)
 
-<div class="navMali">
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#"></a>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="index.html#about-us">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="index.html#contact">Contact Us</a>
-        </li>
-
-      </ul>
-    </div>
-  </div>
-</nav>
-
-</div>
-
-
-<!-- university and subjects modal -->
-    <div class="container mt-5">
-        <h1> Welcome</h1>
-        <p>Start by choosing your preferred universities, then add your subjects.</p>
-        <br>
-        <!-- Button to trigger the university selection modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#universityModal">
-            Choose University
-        </button>
-        <p class="mt-3 text-muted">Universities Selected: <span id="selectedUniversityDisplay" class="fw-bold">None</span></p>
-
-        <!-- Button to add subjects, initially hidden -->
-        <button type="button" class="btn btn-primary mt-3" id="addSubjectsBtn" data-bs-toggle="modal" data-bs-target="#subjectModal">
-            Add Subjects
-        </button>
-
-        <!-- Added Subjects section, initially hidden -->
-        <div id="addedSubjectsSection">
-            <h4 class="mt-4">Added Subjects:</h4>
-            <div id="addedSubjectsDisplay" class="mt-2">
-                <!-- Subjects and their levels will be displayed here -->
-                <p class="text-muted" id="noSubjectsAdded">No subjects added yet.</p>
-            </div>
-            <!-- Submit button, initially hidden -->
-            <button type="button" class="btn btn-success mt-4" id="submitDataBtn">
-                Submit All Data
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#" id="nav-calculator">Tool</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-recommendations">Recommendations</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-application-checklist">Application Checklist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-faqs">FAQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="Bursaries">Bursaries</a>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
+<br>
+<br>
+<br>
+<br>
+
+    <div class="card-container" id="form-page">
+        <div class="header-section">
+            <i class="fas fa-calculator fa-2x text-muted mb-3"></i>
+            <h2>Enter Your Matric Results</h2>
+            <p>Add your subjects and levels to get personalized university recommendations</p>
+        </div>
+
+        <div id="subjects-container">
+            <!-- Subject rows will be added here by JavaScript -->
+        </div>
+
+        <button type="button" class="btn add-subject-btn" id="add-subject-btn" disabled>
+            <i class="fas fa-plus"></i> Add Subject
+        </button>
+
+        <div class="total-aps-score">
+            Total APS Score <span id="total-aps-score">0</span>
+        </div>
+
+        <div id="recommendations-error-message" class="error-message">
+            <!-- Dynamic error message will be displayed here -->
+        </div>
+        <div id="duplicate-subject-error" class="error-message">
+            This subject has already been selected. Please choose a different one.
+        </div>
+
+        <button type="button" class="btn recommendations-btn" id="recommendations-btn">
+            Get University Recommendations
+        </button>
     </div>
 
-    <!-- University Selection Modal Structure -->
-    <div class="modal fade" id="universityModal" tabindex="-1" aria-labelledby="universityModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="universityModalLabel">Select Your University (Max 3)</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body modal-body-scrollable">
-                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-                        <!-- University Cards will be generated here -->
-                        <!-- University of Cape Town (UCT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UCT" data-fullname="University of Cape Town">
-                                <img src="logos/UCT.png" class="card-img-top" alt="University of Cape Town">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Cape Town</h5>
-                                    <p class="card-text text-muted">UCT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of the Witwatersrand (Wits) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="Wits" data-fullname="University of the Witwatersrand">
-                                <img src="logos/Wits.png" class="card-img-top" alt="University of the Witwatersrand">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of the Witwatersrand</h5>
-                                    <p class="card-text text-muted">Wits</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Stellenbosch University (SU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="SU" data-fullname="Stellenbosch University">
-                                <img src="logos/stellenbosch Uni.jpg" class="card-img-top" alt="Stellenbosch University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Stellenbosch University</h5>
-                                    <p class="card-text text-muted">SU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Pretoria (UP) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UP" data-fullname="University of Pretoria">
-                                <img src="logos/UP.png" class="card-img-top" alt="University of Pretoria">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Pretoria</h5>
-                                    <p class="card-text text-muted">UP</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of KwaZulu-Natal (UKZN) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UKZN" data-fullname="University of KwaZulu-Natal">
-                                <img src="logos/ukzn.png" class="card-img-top" alt="University of KwaZulu-Natal">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of KwaZulu-Natal</h5>
-                                    <p class="card-text text-muted">UKZN</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Rhodes University (RU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="RU" data-fullname="Rhodes University">
-                                <img src="logos/Rhodes University.png" class="card-img-top" alt="Rhodes University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Rhodes University</h5>
-                                    <p class="card-text text-muted">RU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Johannesburg (UJ) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UJ" data-fullname="University of Johannesburg">
-                                <img src="logos/UJ.png" class="card-img-top" alt="University of Johannesburg">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Johannesburg</h5>
-                                    <p class="card-text text-muted">UJ</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Nelson Mandela University (NMU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="NMU" data-fullname="Nelson Mandela University">
-                                <img src="logos/NMU.png" class="card-img-top" alt="Nelson Mandela University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Nelson Mandela University</h5>
-                                    <p class="card-text text-muted">NMU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of the Western Cape (UWC) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UWC" data-fullname="University of the Western Cape">
-                                <img src="logos/UWC.png" class="card-img-top" alt="University of the Western Cape">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of the Western Cape</h5>
-                                    <p class="card-text text-muted">UWC</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Mpumalanga (UMP) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UMP" data-fullname="University of Mpumalanga">
-                                <img src="logos/UMP.png" class="card-img-top" alt="University of Mpumalanga">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Mpumalanga</h5>
-                                    <p class="card-text text-muted">UMP</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Limpopo (UL) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UL" data-fullname="University of Limpopo">
-                                <img src="logos/UL.png" class="card-img-top" alt="University of Limpopo">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Limpopo</h5>
-                                    <p class="card-text text-muted">UL</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- North-West University (NWU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="NWU" data-fullname="North-West University">
-                                <img src="logos/NWU.png" class="card-img-top" alt="North-West University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">North-West University</h5>
-                                    <p class="card-text text-muted">NWU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of Fort Hare (UFH) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UFH" data-fullname="University of Fort Hare">
-                                <img src="logos/forthere.png" class="card-img-top" alt="University of Fort Hare">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of Fort Hare</h5>
-                                    <p class="card-text text-muted">UFH</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Sol Plaatje University (SPU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="SPU" data-fullname="Sol Plaatje University">
-                                <img src="logos/sol platje.png" class="card-img-top" alt="Sol Plaatje University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Sol Plaatje University</h5>
-                                    <p class="card-text text-muted">SPU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Walter Sisulu University (WSU) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="WSU" data-fullname="Walter Sisulu University">
-                                <img src="logos/WSU.png" class="card-img-top" alt="Walter Sisulu University">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Walter Sisulu University</h5>
-                                    <p class="card-text text-muted">WSU</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Tshwane University of Technology (TUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="TUT" data-fullname="Tshwane University of Technology">
-                                <img src="logos/TUT.png" class="card-img-top" alt="Tshwane University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Tshwane University of Technology</h5>
-                                    <p class="card-text text-muted">TUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Durban University of Technology (DUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="DUT" data-fullname="Durban University of Technology">
-                                <img src="logos/DUT.png" class="card-img-top" alt="Durban University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Durban University of Technology</h5>
-                                    <p class="card-text text-muted">DUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Cape Peninsula University of Technology (CPUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="CPUT" data-fullname="Cape Peninsula University of Technology">
-                                <img src="logos/CPUT.png" class="card-img-top" alt="Cape Peninsula University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Cape Peninsula University of Technology</h5>
-                                    <p class="card-text text-muted">CPUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Vaal University of Technology (VUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="VUT" data-fullname="Vaal University of Technology">
-                                <img src="logos/VUT.jpg" class="card-img-top" alt="Vaal University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Vaal University of Technology</h5>
-                                    <p class="card-text text-muted">VUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Mangosuthu University of Technology (MUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="MUT" data-fullname="Mangosuthu University of Technology">
-                                <img src="logos/MUT.jpg" class="card-img-top" alt="Mangosuthu University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Mangosuthu University of Technology</h5>
-                                    <p class="card-text text-muted">MUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Central University of Technology (CUT) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="CUT" data-fullname="Central University of Technology">
-                                <img src="logos/CUT.png" class="card-img-top" alt="Central University of Technology">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Central University of Technology</h5>
-                                    <p class="card-text text-muted">CUT</p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- University of South Africa (UNISA) -->
-                        <div class="col">
-                            <div class="card h-100 shadow-sm card-clickable" id="UNISA" data-fullname="University of South Africa">
-                                <img src="logos/UNISA.png" class="card-img-top" alt="University of South Africa">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">University of South Africa</h5>
-                                    <p class="card-text text-muted">UNISA</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="confirmUniversitySelection">Confirm Selection</button>
-                </div>
+    <div class="card-container recommendations-page" id="recommendations-page">
+        <button class="back-btn" id="back-to-form-btn-recs">
+            <i class="fas fa-arrow-left"></i> Back to Form
+        </button>
+
+        <div class="header-section">
+            <h2>Your University Recommendations</h2>
+            <p>Based on your matric results, here are the universities that match your academic profile</p>
+        </div>
+
+        <div class="summary-box">
+            <div class="summary-item">
+                <i class="fas fa-trophy"></i>
+                <div class="value" id="summary-aps-score">0</div>
+                <div class="label">Your APS Score</div>
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-bullseye"></i>
+                <div class="value" id="summary-performance-level">N/A</div>
+                <div class="label">Performance Level</div>
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-users"></i>
+                <div class="value" id="summary-subjects-entered">0</div>
+                <div class="label">Subjects Entered</div>
+            </div>
+        </div>
+
+        <div class="match-section perfect-match">
+            <h3>Perfect Matches <span class="count-badge" id="perfect-matches-count">0 universities</span></h3>
+            <p>These universities are an excellent match for your academic profile. You meet or exceed their requirements.</p>
+            <div class="university-cards-grid" id="perfect-matches-container">
+                <!-- Perfect match university cards will be injected here -->
+            </div>
+        </div>
+
+        <div class="match-section good-match mt-4">
+            <h3>Good Matches <span class="count-badge" id="good-matches-count">0 universities</span></h3>
+            <p>These universities are a good fit for your academic achievements. You have a strong chance of admission.</p>
+            <div class="university-cards-grid" id="good-matches-container">
+                <!-- Good match university cards will be injected here -->
+            </div>
+        </div>
+
+        <div class="match-section no-match mt-4">
+            <h3>Other Universities <span class="count-badge" id="other-matches-count">0 universities</span></h3>
+            <p>These universities might be worth considering, but may require further review of their specific program requirements.</p>
+            <div class="university-cards-grid" id="other-matches-container">
+                <!-- Other university cards will be injected here -->
             </div>
         </div>
     </div>
 
-    <!-- Subject Input Modal Structure -->
-    <div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="subjectModalLabel">Add Subject Details</h5>
-                    <small class="text-muted d-block">Please select a subject only from the suggested list.</small>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="card-container improve-grades-page" id="improve-grades-page">
+        <button class="back-btn" id="back-to-form-btn-improve">
+            <i class="fas fa-arrow-left"></i> Back to Form
+        </button>
+
+        <div class="header-section">
+            <i class="fas fa-lightbulb fa-2x text-warning mb-3"></i>
+            <h2>How to Improve Your Grades</h2>
+            <p>Don't worry! With the right strategies, you can boost your APS score and open up more opportunities.</p>
+        </div>
+
+        <!-- Duplicated Summary Box for Improve Grades Page -->
+        <div class="summary-box">
+            <div class="summary-item">
+                <i class="fas fa-trophy"></i>
+                <div class="value red-text" id="summary-aps-score-improve">0</div>
+                <div class="label">Your APS Score</div>
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-bullseye"></i>
+                <div class="value red-text" id="summary-performance-level-improve">N/A</div>
+                <div class="label">Performance Level</div>
+            </div>
+            <div class="summary-item">
+                <i class="fas fa-users"></i>
+                <div class="value red-text" id="summary-subjects-entered-improve">0</div>
+                <div class="label">Subjects Entered</div>
+            </div>
+        </div>
+
+        <div class="improve-grades-content">
+            <h4>Study Tips & Resources</h4>
+            <p>Here are some actionable steps and resources to help you improve your matric results:</p>
+            <ul>
+                <li><i class="fas fa-check-circle"></i> **Understand the Syllabus:** Know exactly what's expected in each subject.</li>
+                <li><i class="fas fa-check-circle"></i> **Create a Study Schedule:** Plan your time effectively, allocating specific slots for each subject.</li>
+                <li><i class="fas fa-check-circle"></i> **Active Learning:** Don't just read; summarize, quiz yourself, and explain concepts aloud.</li>
+                <li><i class="fas fa-check-circle"></i> **Practice Past Papers:** Familiarize yourself with exam formats and common question types.</li>
+                <li><i class="fas fa-check-circle"></i> **Seek Help:** Don't hesitate to ask teachers, tutors, or classmates for clarification.</li>
+                <li><i class="fas fa-check-circle"></i> **Stay Healthy:** Ensure you get enough sleep, eat well, and exercise regularly.</li>
+                <li><i class="fas fa-check-circle"></i> **Online Resources:** Explore educational websites, videos, and online courses.</li>
+                <li><i class="fas fa-check-circle"></i> **Join Study Groups:** Collaborate with peers to reinforce learning and share insights.</li>
+            </ul>
+            <p>Remember, consistency is key! Every small step contributes to your overall improvement.</p>
+        </div>
+    </div>
+
+    
+
+    <!-- New Application Checklist Page -->
+    <div class="card-container application-checklist-page" id="application-checklist-page">
+        <button class="back-btn" id="back-to-form-btn-checklist">
+            <i class="fas fa-arrow-left"></i> Back to Form
+        </button>
+
+        <div class="header-section">
+            <i class="fas fa-clipboard-check fa-2x text-info mb-3"></i>
+            <h2>University Application Checklist</h2>
+            <p>A step-by-step guide to help you prepare and submit your university applications successfully.</p>
+        </div>
+
+        <div class="checklist-content">
+            <h4>Your Application Journey</h4>
+            <p>Follow these steps to ensure you don't miss anything important during the application process:</p>
+            <ul>
+                <li><i class="fas fa-check-square"></i> **Research Universities & Programs**
+                    <br>Identify universities and courses that align with your academic profile and career goals. Check specific APS and subject requirements.</li>
+                <li><i class="fas fa-check-square"></i> **Gather Required Documents**
+                    <br>Prepare certified copies of your ID, matric results (or latest school report), and any other relevant certificates.</li>
+                <li><i class="fas fa-check-square"></i> **Write a Personal Statement/Motivation Letter**
+                    <br>Craft a compelling letter explaining why you want to study your chosen course and at that specific university.</li>
+                <li><i class="fas fa-check-square"></i> **Obtain Academic Transcripts**
+                    <br>Ensure you have official transcripts or statements of results from your school.</li>
+                <li><i class="fas fa-check-square"></i> **Get Letters of Recommendation (if required)**
+                    <br>Ask teachers or mentors to write recommendation letters well in advance.</li>
+                <li><i class="fas fa-check-square"></i> **Complete Online Application Forms**
+                    <br>Fill out the application forms accurately and completely for each university.</li>
+                <li><i class="fas fa-check-square"></i> **Pay Application Fees**
+                    <br>Be aware of and pay any non-refundable application fees before the deadline.</li>
+                <li><i class="fas fa-check-square"></i> **Submit Applications Before Deadlines**
+                    <br>Pay close attention to application closing dates for each university and program.</li>
+                <li><i class="fas fa-check-square"></i> **Track Your Application Status**
+                    <br>Regularly check the university's portal for updates on your application.</li>
+                <li><i class="fas fa-check-square"></i> **Apply for Financial Aid/Bursaries**
+                    <br>Explore and apply for any available scholarships or financial assistance.</li>
+                <li><i class="fas fa-check-square"></i> **Prepare for Interviews/Tests (if applicable):**
+                    <br>Some programs may require interviews or entrance exams.</li>
+                <li><i class="fas fa-check-square"></i> **Accept Offer & Register**
+                    <br>Once accepted, formally accept your offer and complete the registration process.</li>
+            </ul>
+            <p>Good luck with your applications!</p>
+        </div>
+    </div>
+
+    <!-- New FAQs Page -->
+    <div class="card-container faqs-page" id="faqs-page">
+        <button class="back-btn" id="back-to-form-btn-faqs">
+            <i class="fas fa-arrow-left"></i> Back to Form
+        </button>
+
+        <div class="header-section">
+            <i class="fas fa-question-circle fa-2x text-primary mb-3"></i>
+            <h2>Frequently Asked Questions</h2>
+            <p>Find answers to common questions about matric results, APS scores, and university applications.</p>
+        </div>
+
+        <div class="faqs-content">
+            <div class="faq-item">
+                <div class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq-q1" aria-expanded="false" aria-controls="faq-q1">
+                    What is an APS score? <i class="fas fa-chevron-down"></i>
                 </div>
-                <div class="modal-body modal-body-scrollable">
-                    <form id="subjectForm" novalidate> <!-- Added novalidate to handle validation via JS -->
-                        <div class="mb-3">
-                            <label for="subjectName" class="form-label">Subject Name</label>
-                            <!-- Pattern updated to allow letters, spaces, and parentheses -->
-                            <input type="text" class="form-control" id="subjectName" placeholder="e.g., Mathematics" pattern="[a-zA-Z ()]+" title="Only letters, spaces, and parentheses are allowed" required>
-                            <div id="subjectNameFeedback" class="invalid-feedback">
-                                <!-- Dynamic feedback message -->
-                            </div>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="subjectLevel" class="form-label">Level (1-7)</label>
-                            <select class="form-select" id="subjectLevel" required>
-                                <option value="" disabled selected>Select a level</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                                <option value="7">7</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Please select a subject level.
-                            </div>
-                            <div class="valid-feedback">
-                                Looks good!
-                            </div>
-                        </div>
-                    </form>
-                    <hr>
-                    <h6>Suggested Subjects:</h6>
-                    <div id="subjectSuggestions" class="d-flex flex-wrap">
-                        <!-- Subject suggestions will be dynamically added here -->
-                    </div>
+                <div id="faq-q1" class="faq-answer collapse">
+                    The Admission Point Score (APS) is a system used by South African universities to evaluate applicants. Your matric subject results are converted into points, and the total points determine your APS score. Each university and program will have a minimum APS requirement.
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveSubjectBtn">Save Subject</button>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq-q2" aria-expanded="false" aria-controls="faq-q2">
+                    How is my APS score calculated? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="faq-q2" class="faq-answer collapse">
+                    Typically, your APS score is calculated by assigning points to your matric subject levels (e.g., Level 7 = 7 points, Level 6 = 6 points, etc.). The total points from your best 6 or 7 subjects (excluding Life Orientation, which is often counted differently or not at all) are summed up to give your final APS. Specific calculations may vary slightly per university.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq-q3" aria-expanded="false" aria-controls="faq-q3">
+                    What if my APS score is too low for my desired course? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="faq-q3" class="faq-answer collapse">
+                    Don't despair! You can explore alternative options such as bridging courses, higher certificates, or diplomas that may lead to degree studies. You can also consider rewriting certain matric subjects to improve your levels. This app provides study tips for improvement.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq-q4" aria-expanded="false" aria-controls="faq-q4">
+                    When should I apply to universities? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="faq-q4" class="faq-answer collapse">
+                    Application periods vary by university, but generally, applications open in April/May and close between June and September of the year preceding your desired enrollment. It's crucial to check specific deadlines for each institution and program.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question collapsed" data-bs-toggle="collapse" data-bs-target="#faq-q5" aria-expanded="false" aria-controls="faq-q5">
+                    Do I need to apply for financial aid separately? <i class="fas fa-chevron-down"></i>
+                </div>
+                <div id="faq-q5" class="faq-answer collapse">
+                    Yes, typically financial aid (like NSFAS or university-specific bursaries) requires a separate application process. It's advisable to apply for financial aid as early as possible, often concurrently with your university application.
                 </div>
             </div>
         </div>
     </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
+    <!-- Footer -->
+<div id="footer2">
+<footer class="footer">
+        <div class="container">
+            <div class="row">
+                <!-- University Admission Probability Tool (UAPT) Section -->
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="rounded-corners">University Admission Probability Tool (UAPT)</h5>
+                    <p class="rounded-corners">Empowering South African students to make informed decisions about their higher education journey.</p>
+                </div>
 
+                <!-- Quick Links Section -->
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="rounded-corners">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#" class="rounded-corners">Home</a></li>
+                        <li class="mb-2"><a href="#" class="rounded-corners">About Us</a></li>
+                        <li class="mb-2"><a href="#" class="rounded-corners">How It Works</a></li>
+                        <li class="mb-2"><a href="#" class="rounded-corners">Contact</a></li>
+                    </ul>
+                </div>
 
-    <!-- jQuery (must be loaded before Bootstrap JS) -->
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> -->
+                <!-- Contact Section -->
+                <div class="col-md-4">
+                    <h5 class="rounded-corners">Contact</h5>
+                    <div class="contact-info mb-2">
+                        <i class="fas fa-envelope rounded-corners"></i> <span class="rounded-corners">info@UAPT.co.za</span>
+                    </div>
+                    <div class="contact-info">
+                        <i class="fas fa-phone rounded-corners"></i> <span class="rounded-corners">+27 767675948</span>
+                    </div>
+                </div>
+            </div>
 
-    <script src="libs/js/jquery.min.js"></script>
-
-    <!-- Popper.js (Bootstrap dependency) -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" xintegrity="sha384-I7E8VVD/ismYTF4hNIPjVpZVfros4raPrJaUFLEOpQxHh7ZPKc/I8s6c/N" crossorigin="anonymous"></script> -->
-    <script src="libs/js/popper.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" xintegrity="sha384-0pUGZvbkm6XF6gxjEnlcooxfFLpSjFVzB7S7sHYgK7z7q3r9y2uKq/q6j+6B" crossorigin="anonymous"></script> -->
-    <script src="libs/js/bootstrap.min.js"></script>
-    <script src="libs/js/script.js"></script>
-
-   
+            <!-- Bottom Bar - Copyright and Social Icons -->
+            <div class="row bottom-bar mt-4 pt-3 align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0 rounded-corners">&copy; 2025 University Admission Tool. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <div class="social-icons">
+                        <a href="#" class="rounded-corners"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="rounded-corners"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="rounded-corners"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+    
+    <!-- Bootstrap JS (Popper and Bootstrap Bundle) -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <!-- Custom JavaScript -->
+      <script src="libs/js/script.js"></script>
 </body>
 </html>

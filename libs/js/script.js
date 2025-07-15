@@ -1,416 +1,743 @@
- $(document).ready(function() {
-            
-    //Get started button is clicked
-            $('#getStartedBtn').on('click', function() {
-                window.location.href = 'selectUni.html';
-            });
-       
-    
-    // Array to store the TEMPORARY selections within the modal
-            let tempSelectedUniversities = [];
-            const maxUniversitySelections = 3; // Max universities user can select
-
-    // Array to store the CONFIRMED selections for the main page display and "Add Subjects" button
-            let confirmedSelectedUniversities = [];
-
-    // Array to store the subjects added by the user
-            let addedSubjects = [];
-            const maxSubjectSelections = 7; // Max subjects user can add
-
-    // Variable to keep track of the index of the subject being edited
-            let editingSubjectIndex = -1; // -1 means no subject is currently being edited
-
-    // List of suggested subjects (original case preserved for display, but lowercased for comparison)
-            const allSuggestedSubjects = [
-                "English Home Language", "Afrikaans Home Language", "isiZulu Home Language",
-                "isiXhosa Home Language", "Sepedi Home Language", "Setswana Home Language",
-                "Sesotho Home Language", "Xitsonga Home Language", "Tshivenda Home Language",
-                "siSwati Home Language", "isiNdebele Home Language", "English First Additional Language",
-                "Afrikaans First Additional Language", "isiZulu First Additional Language", "Mathematics",
-                "Mathematical Literacy", "Physical Sciences", "Life Sciences", "Geography", "History",
-                "Agricultural Sciences", "Accounting", "Business Studies", "Economics", "Religion Studies",
-                "Consumer Studies", "Hospitality Studies", "Tourism", "Dramatic Arts", "Music",
-                "Visual Arts", "Design", "Computer Applications Technology (CAT)", "Information Technology (IT)",
-                "Engineering Graphics and Design (EGD)", "Civil Technology", "Mechanical Technology",
-                "Electrical Technology", "Maritime Economics", "Aviation Studies", "Fashion Design", "Life Orientation (LO)"
-            ];
-            // Lowercased version for efficient comparison
-            const allSuggestedSubjectsLower = allSuggestedSubjects.map(s => s.toLowerCase());
-
-            // Function to update the visibility of the "Add Subjects" button
-            function updateAddSubjectsButtonVisibility() {
-                if (confirmedSelectedUniversities.length > 0) {
-                    $('#addSubjectsBtn').show(); // Show the button
-                } else {
-                    $('#addSubjectsBtn').hide(); // Hide the button
-                }
-            }
-
-            // Function to update the visibility of the "Submit All Data" button
-            function updateSubmitButtonVisibility() {
-                if (addedSubjects.length >= maxSubjectSelections) {
-                    $('#submitDataBtn').show(); // Show the submit button
-                } else {
-                    $('#submitDataBtn').hide(); // Hide the submit button
-                }
-            }
-
-            // Function to render subject suggestions based on a provided list (or all suggestions if none provided)
-            function renderSubjectSuggestions(subjectsToRender = allSuggestedSubjects) {
-                const $suggestionsContainer = $('#subjectSuggestions');
-                $suggestionsContainer.empty(); // Clear previous suggestions
-
-                if (subjectsToRender.length === 0) {
-                    $suggestionsContainer.append($('<p class="text-muted">No matching suggestions.</p>'));
-                    return;
-                }
-
-                subjectsToRender.forEach(subject => {
-                    const $suggestion = $('<span class="subject-suggestion btn btn-light btn-sm"></span>').text(subject);
-                    $suggestion.on('click', function() {
-                        $('#subjectName').val($(this).text()).trigger('input'); // Trigger input to update validation
-                    });
-                    $suggestionsContainer.append($suggestion);
-                });
-            }
-
-            // Function to display added subjects on the main page
-            function displayAddedSubjects() {
-                const $addedSubjectsSection = $('#addedSubjectsSection');
-                const $displayContainer = $('#addedSubjectsDisplay');
-                $displayContainer.empty(); // Clear previous display
-
-                if (addedSubjects.length === 0) {
-                    $addedSubjectsSection.hide(); // Hide the entire section
-                    $displayContainer.append($('<p class="text-muted" id="noSubjectsAdded">No subjects added yet.</p>'));
-                } else {
-                    $addedSubjectsSection.show(); // Show the entire section
-                    addedSubjects.forEach((subject, index) => {
-                        const subjectItem = `
-                            <div class="subject-display-item">
-                                <span>${subject.name}</span>
-                                <div class="subject-actions">
-                                    <span class="badge bg-primary">Level: ${subject.level}</span>
-                                    <button type="button" class="btn btn-sm btn-info edit-subject-btn" data-index="${index}">Edit</button>
-                                    <button type="button" class="btn btn-sm btn-danger delete-subject-btn" data-index="${index}">Delete</button>
-                                </div>
-                            </div>
-                        `;
-                        $displayContainer.append(subjectItem);
-                    });
-                    // Attach event listeners after elements are added to DOM
-                    $('.edit-subject-btn').on('click', function() {
-                        const index = $(this).data('index');
-                        editSubject(index);
-                    });
-                    $('.delete-subject-btn').on('click', function() {
-                        const index = $(this).data('index');
-                        deleteSubject(index);
-                    });
-                }
-                updateSubmitButtonVisibility(); // Update submit button visibility after subjects are displayed
-            }
-
-            // Function to delete a subject
-            function deleteSubject(index) {
-                addedSubjects.splice(index, 1); // Remove 1 element at the given index
-                displayAddedSubjects(); // Re-render the list
-            }
-
-            // Function to edit a subject
-            function editSubject(index) {
-                editingSubjectIndex = index; // Store the index of the subject being edited
-                const subjectToEdit = addedSubjects[index];
-
-                // Populate the modal fields with the subject's current data
-                $('#subjectName').val(subjectToEdit.name).trigger('input'); // Trigger input for validation/filtering
-                $('#subjectLevel').val(subjectToEdit.level).trigger('change'); // Trigger change for validation
-
-                // Open the subject modal
-                $('#subjectModal').modal('show');
-            }
-
-
-            // Add click event listener to each card within the university modal
-            $('.card-clickable').on('click', function() {
-                const universityId = $(this).attr('id');
-                const universityFullName = $(this).data('fullname');
-
-                // Check if the card is already selected (in the temporary array)
-                const isSelected = tempSelectedUniversities.some(uni => uni.id === universityId);
-
-                if (isSelected) {
-                    // If selected, deselect it
-                    $(this).removeClass('selected');
-                    tempSelectedUniversities = tempSelectedUniversities.filter(uni => uni.id !== universityId);
-                } else {
-                    // If not selected and we haven't reached the max selections
-                    if (tempSelectedUniversities.length < maxUniversitySelections) {
-                        $(this).addClass('selected');
-                        tempSelectedUniversities.push({ id: universityId, name: universityFullName });
-                    } else {
-                        // Provide feedback (e.g., via console log)
-                        console.log(`You can select a maximum of ${maxUniversitySelections} universities.`);
-                        return; // Prevent further action if max selected
-                    }
-                }
-
-                // Log temporary selections (for debugging)
-                console.log("Temporary selected in modal:", tempSelectedUniversities.map(uni => uni.id).join(', '));
-
-                // If 3 universities are selected in the modal, automatically confirm and close
-                if (tempSelectedUniversities.length === maxUniversitySelections) {
-                    // Copy temporary selections to confirmed selections
-                    confirmedSelectedUniversities = [...tempSelectedUniversities];
-
-                    // Update the display on the main page
-                    const displayNames = confirmedSelectedUniversities.map(uni => uni.name || uni.id);
-                    $('#selectedUniversityDisplay').text(displayNames.join(', '));
-
-                    // Update the "Add Subjects" button visibility
-                    updateAddSubjectsButtonVisibility();
-
-                    // Close the university modal
-                    $('#universityModal').modal('hide');
-                }
-            });
-
-            // Handle the "Confirm Selection" button click in the university modal footer
-            $('#confirmUniversitySelection').on('click', function() {
-                // Copy temporary selections to confirmed selections
-                confirmedSelectedUniversities = [...tempSelectedUniversities];
-
-                // Update the display on the main page
-                const displayNames = confirmedSelectedUniversities.map(uni => uni.name || uni.id);
-                $('#selectedUniversityDisplay').text(displayNames.length > 0 ? displayNames.join(', ') : 'None');
-
-                // Update the "Add Subjects" button visibility
-                updateAddSubjectsButtonVisibility();
-
-                // Close the university modal
-                $('#universityModal').modal('hide');
-                console.log("Confirmed selections:", confirmedSelectedUniversities.map(uni => uni.id).join(', '));
-            });
-
-            // Handle university modal opening
-            $('#universityModal').on('show.bs.modal', function () {
-                // When the modal is about to be shown, populate tempSelectedUniversities with confirmed ones
-                // so previous selections are visually present for editing.
-                tempSelectedUniversities = [...confirmedSelectedUniversities];
-
-                // Visually mark selected cards inside the modal based on tempSelectedUniversities
-                $('.card-clickable').removeClass('selected'); // Clear all selections first
-                tempSelectedUniversities.forEach(uni => {
-                    $(`#${uni.id}`).addClass('selected');
-                });
-            });
-
-
-            // Handle university modal closing
-            $('#universityModal').on('hidden.bs.modal', function () {
-                // Clear temporary selections when modal is hidden, without affecting confirmed ones
-                tempSelectedUniversities = [];
-                // Ensure all cards are deselected visually for next modal open
-                $('.card-clickable').removeClass('selected');
-            });
-
-            // Function to validate subject name
-            function validateSubjectName(inputElement) {
-                const subjectNameInput = $(inputElement);
-                const subjectNameFeedback = $('#subjectNameFeedback');
-                const subjectName = subjectNameInput.val().trim();
-                const subjectNameLower = subjectName.toLowerCase();
-
-                subjectNameInput.removeClass('is-valid is-invalid is-unrecognized'); // Clear previous states
-
-                if (subjectName === '') {
-                    subjectNameInput.addClass('is-invalid');
-                    subjectNameFeedback.text('Subject name cannot be empty.');
-                    return false;
-                }
-
-                // Updated pattern to allow letters, spaces, and parentheses
-                const pattern = /^[a-zA-Z ()]+$/; // Regex for letters, spaces, and parentheses
-                if (!pattern.test(subjectName)) {
-                    subjectNameInput.addClass('is-invalid');
-                    subjectNameFeedback.text('Only letters, spaces, and parentheses are allowed for the subject name.');
-                    return false;
-                }
-
-
-                // Check for exact match in the lowercased list
-                if (allSuggestedSubjectsLower.includes(subjectNameLower)) {
-                    subjectNameInput.addClass('is-valid');
-                    subjectNameFeedback.text('Looks good!');
-                    return true;
-                } else {
-                    // Not an exact match, mark as unrecognized (orange)
-                    subjectNameInput.addClass('is-unrecognized'); // Apply orange border class
-                    subjectNameFeedback.text('Subject is not recognized. Please select only from the suggested list.');
-                    return false;
-                }
-            }
-
-
-            // Handle Save Subject button click in the Subject Modal
-            $('#saveSubjectBtn').on('click', function() {
-                const subjectNameInput = $('#subjectName');
-                const subjectLevelInput = $('#subjectLevel');
-                const subjectLevel = subjectLevelInput.val();
-                const subjectName = subjectNameInput.val().trim();
-                const subjectNameLower = subjectName.toLowerCase();
-
-                let isFormValid = true;
-
-                // Validate subject name using the new function
-                if (!validateSubjectName(subjectNameInput)) {
-                    isFormValid = false;
-                }
-
-                // Validate subject level
-                if (!subjectLevel) { // Check if level is selected
-                    subjectLevelInput.addClass('is-invalid').removeClass('is-valid');
-                    isFormValid = false;
-                } else {
-                    subjectLevelInput.addClass('is-valid').removeClass('is-invalid');
-                }
-
-                if (isFormValid) {
-                    // Check for duplicate subject names (case-insensitive)
-                    const isDuplicate = addedSubjects.some((subject, idx) =>
-                        subject.name.toLowerCase() === subjectNameLower && idx !== editingSubjectIndex
-                    );
-
-                    if (isDuplicate) {
-                        alert(`Subject "${subjectName}" has already been added. Please enter a unique subject.`);
-                        subjectNameInput.addClass('is-invalid is-unrecognized'); // Mark as invalid/unrecognized
-                        $('#subjectNameFeedback').text('This subject has already been added.');
-                        return; // Stop function execution
-                    }
-
-                    // Prevent adding more subjects if already at max and not editing
-                    if (addedSubjects.length >= maxSubjectSelections && editingSubjectIndex === -1) {
-                        alert(`You can only add a maximum of ${maxSubjectSelections} subjects.`);
-                        return; // Stop function execution
-                    }
-
-                    console.log(`Subject Added: ${subjectName}, Level: ${subjectLevel}`);
-
-                    // Check if we are editing an existing subject or adding a new one
-                    if (editingSubjectIndex !== -1) {
-                        // Update existing subject
-                        addedSubjects[editingSubjectIndex] = { name: subjectName, level: subjectLevel };
-                        editingSubjectIndex = -1; // Reset editing state
-                    } else {
-                        // Add new subject
-                        addedSubjects.push({ name: subjectName, level: subjectLevel });
-                    }
-
-                    displayAddedSubjects(); // Update the display on the main page
-
-                    // Clear the form fields and remove validation feedback
-                    subjectNameInput.val('').removeClass('is-valid is-invalid is-unrecognized');
-                    subjectLevelInput.val('').find('option:first').prop('selected', true).removeClass('is-valid is-invalid');
-                    $('#subjectNameFeedback').text(''); // Clear feedback message
-
-                    // Close the subject modal
-                    $('#subjectModal').modal('hide');
-                } else {
-                    console.log("Please correct the highlighted fields.");
-                    // Bootstrap's invalid-feedback messages will appear
-                }
-            });
-
-            // Real-time validation and filtering for subjectName
-            $('#subjectName').on('input', function() {
-                const inputValue = $(this).val().trim().toLowerCase();
-
-                // Filter suggestions based on input (case-insensitive)
-                const filteredSubjects = allSuggestedSubjects.filter(subject =>
-                    subject.toLowerCase().includes(inputValue)
-                );
-                renderSubjectSuggestions(filteredSubjects); // Render filtered suggestions
-
-                // Apply validation styling using the new function
-                validateSubjectName(this);
-            });
-
-            // Validation feedback for subjectLevel
-            $('#subjectLevel').on('change', function() {
-                if (this.checkValidity() && $(this).val() !== '') {
-                    $(this).addClass('is-valid').removeClass('is-invalid');
-                } else {
-                    $(this).addClass('is-invalid').removeClass('is-valid');
-                }
-            });
-
-            // Render suggestions and reset form when the subject modal is shown
-            $('#subjectModal').on('show.bs.modal', function () {
-                renderSubjectSuggestions(); // Render all suggestions initially
-                // Clear form fields and validation feedback when modal is opened for a new entry
-                $('#subjectForm')[0].reset(); // Reset form to clear inputs and dropdown
-                $('#subjectName').removeClass('is-valid is-invalid is-unrecognized');
-                $('#subjectLevel').removeClass('is-valid is-invalid');
-                $('#subjectNameFeedback').text(''); // Clear specific feedback message
-                editingSubjectIndex = -1; // Ensure editing state is reset when opening for new entry
-            });
-
-            // Handle Submit All Data button click
-            $('#submitDataBtn').on('click', function() {
-                // Ensure all necessary data is available
-                if (confirmedSelectedUniversities.length === 0) {
-                    alert("Please select at least one university before submitting.");
-                    return;
-                }
-                if (addedSubjects.length !== maxSubjectSelections) { // Changed to strict equality
-                    alert(`Please add exactly ${maxSubjectSelections} subjects before submitting.`);
-                    return;
-                }
-
-                const dataToSend = {
-                    universities: confirmedSelectedUniversities,
-                    subjects: addedSubjects
-                };
-
-                console.log("Data to send to API:", dataToSend);
-
-                // --- AJAX CALL PLACEHOLDER ---
-                // Replace 'YOUR_API_ENDPOINT_HERE' with your actual API endpoint
-                // and configure method, headers, and body as needed by your API.
-                fetch('YOUR_API_ENDPOINT_HERE', {
-                    method: 'POST', // Or 'PUT', 'GET', etc.
-                    headers: {
-                        'Content-Type': 'application/json',
-                        // Add any other headers like authorization tokens here
-                        // 'Authorization': 'Bearer YOUR_AUTH_TOKEN'
-                    },
-                    body: JSON.stringify(dataToSend)
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        // Handle HTTP errors
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json(); // Or response.text() if your API doesn't return JSON
-                })
-                .then(data => {
-                    console.log('API response:', data);
-                    alert('Data successfully submitted!');
-                    // Optionally, clear the form or provide further feedback to the user
-                    confirmedSelectedUniversities = [];
-                    addedSubjects = [];
-                    updateAddSubjectsButtonVisibility();
-                    displayAddedSubjects();
-                    $('#selectedUniversityDisplay').text('None');
-                })
-                .catch(error => {
-                    console.error('Error submitting data:', error);
-                    alert('Failed to submit data. Please try again. Error: ' + error.message);
-                });
-            });
-
-
-            // Initial calls on page load
-            updateAddSubjectsButtonVisibility();
-            displayAddedSubjects(); // Initialize subject display and submit button visibility
+document.addEventListener('DOMContentLoaded', () => {
+    // Get started button click handler
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    if (getStartedBtn) {
+        getStartedBtn.addEventListener('click', () => {
+            window.location.href = 'selectUni.html';
         });
+    }
+
+    // DOM Elements - Pages
+    const formPage = document.getElementById('form-page');
+    const recommendationsPage = document.getElementById('recommendations-page');
+    const improveGradesPage = document.getElementById('improve-grades-page');
+    const applicationChecklistPage = document.getElementById('application-checklist-page');
+    const faqsPage = document.getElementById('faqs-page');
+
+    // Navigation Buttons - Back to Form
+    const backToFormBtnRecs = document.getElementById('back-to-form-btn-recs');
+    const backToFormBtnImprove = document.getElementById('back-to-form-btn-improve');
+    const backToFormBtnChecklist = document.getElementById('back-to-form-btn-checklist');
+    const backToFormBtnFaqs = document.getElementById('back-to-form-btn-faqs');
+
+    // Navbar Links
+    const navCalculator = document.getElementById('nav-calculator');
+    const navRecommendations = document.getElementById('nav-recommendations');
+    const navApplicationChecklist = document.getElementById('nav-application-checklist');
+    const navFaqs = document.getElementById('nav-faqs');
+    const navImproveGrades = document.getElementById('nav-improve-grades');
+
+    // Form Elements
+    const subjectsContainer = document.getElementById('subjects-container');
+    const addSubjectBtn = document.getElementById('add-subject-btn');
+    const totalApsScoreSpan = document.getElementById('total-aps-score');
+    const recommendationsBtn = document.getElementById('recommendations-btn');
+    const recommendationsErrorMessage = document.getElementById('recommendations-error-message');
+    const duplicateSubjectError = document.getElementById('duplicate-subject-error');
+
+    // Recommendation Page Elements
+    const summaryApsScore = document.getElementById('summary-aps-score');
+    const summaryPerformanceLevel = document.getElementById('summary-performance-level');
+    const summarySubjectsEntered = document.getElementById('summary-subjects-entered');
+    const perfectMatchesContainer = document.getElementById('perfect-matches-container');
+    const goodMatchesContainer = document.getElementById('good-matches-container');
+    const otherMatchesContainer = document.getElementById('other-matches-container');
+    const perfectMatchesCount = document.getElementById('perfect-matches-count');
+    const goodMatchesCount = document.getElementById('good-matches-count');
+    const otherMatchesCount = document.getElementById('other-matches-count');
+
+    // Improve Grades Page Elements
+    const summaryApsScoreImprove = document.getElementById('summary-aps-score-improve');
+    const summaryPerformanceLevelImprove = document.getElementById('summary-performance-level-improve');
+    const summarySubjectsEnteredImprove = document.getElementById('summary-subjects-entered-improve');
+
+    // Data
+    const levelPoints = {
+        'Level 7': 7,
+        'Level 6': 6,
+        'Level 5': 5,
+        'Level 4': 4,
+        'Level 3': 3,
+        'Level 2': 2,
+        'Level 1': 1
+    };
+
+    const allMatricSubjects = [
+        'Mathematics',
+        'Mathematical Literacy',
+        'Technical Mathematics',
+        'Physical Sciences',
+        'Life Sciences',
+        'English Home Language',
+        'English First Additional Language',
+        'Afrikaans Home Language',
+        'Afrikaans First Additional Language',
+        'IsiZulu Home Language',
+        'IsiXhosa Home Language',
+        'SiSwati Home Language',
+        'IsiNdebele Home Language',
+        'Sepedi Home Language',
+        'Sesotho Home Language',
+        'Setswana Home Language',
+        'Xitsonga Home Language',
+        'Tshivenda Home Language',
+        'South African Sign Language Home Language',
+        'History',
+        'Geography',
+        'Accounting',
+        'Business Studies',
+        'Economics',
+        'Computer Applications Technology',
+        'Information Technology',
+        'Dramatic Arts',
+        'Visual Arts',
+        'Music',
+        'Consumer Studies',
+        'Engineering Graphics and Design',
+        'Agricultural Sciences',
+        'Religion Studies',
+        'Civil Technology',
+        'Sport and Exercise Science',
+        'Nautical Science',
+        'Marine Sciences',
+        'Electrical Technology',
+        'Agricultural Management Practices',
+        'Agricultural Technology',
+        'Design',
+        'Dance',
+        'Hospitality Studies',
+        'Tourism',
+        'Mechanical Technology',
+        'Maritime Economics',
+    ].sort();
+
+    const homeLanguageSubjects = allMatricSubjects.filter(sub => sub.includes('Home Language'));
+    const additionalLanguageSubjects = allMatricSubjects.filter(sub => sub.includes('First Additional Language') || sub.includes('Second Additional Language'));
+
+    const mathSubjects = [
+        'Mathematics',
+        'Mathematical Literacy',
+        'Technical Mathematics'
+    ];
+
+    // University Data (with all required commas)
+    const universities = [
+        {
+            id: 'nwu',
+            name: 'North-West University',
+            location: 'Potchefstroom, North West',
+            description: 'Multi-campus university with strong programs in business, education, and health sciences.',
+            minAPS: 26,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Business', 'Education', 'Health Sciences'],
+            ranking: 7
+        },
+        {
+            id: 'ufs',
+            name: 'University of the Free State',
+            location: 'Bloemfontein, Free State',
+            description: 'Comprehensive university with strong community engagement and diverse programs.',
+            minAPS: 24,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Health Sciences', 'Natural Sciences', 'Humanities'],
+            ranking: 8
+        },
+        {
+            id: 'dut',
+            name: 'Durban University of Technology',
+            location: 'Durban, KwaZulu-Natal',
+            description: 'Technology university offering practical, industry-focused programs.',
+            minAPS: 20,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Applied Sciences', 'Arts & Design', 'Engineering'],
+            ranking: 10
+        },
+        {
+            id: 'ru',
+            name: 'Rhodes University',
+            location: 'Makhanda, Eastern Cape',
+            description: 'Small, prestigious university known for academic excellence and vibrant campus life.',
+            minAPS: 30,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Humanities', 'Science', 'Commerce'],
+            ranking: 5
+        },
+        {
+            id: 'ukzn',
+            name: 'University of KwaZulu-Natal',
+            location: 'Durban, KwaZulu-Natal',
+            description: 'Major university with strong research focus and diverse academic offerings.',
+            minAPS: 28,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Medicine', 'Engineering', 'Law'],
+            ranking: 6
+        },
+        {
+            id: 'up',
+            name: 'University of Pretoria',
+            location: 'Pretoria, Gauteng',
+            description: 'One of South Africa\'s leading research universities, offering a wide range of programs.',
+            minAPS: 32,
+            requiredSubjects: ['Mathematics', 'Physical Sciences', 'English Home Language'],
+            popularPrograms: ['Engineering', 'Law', 'Medicine', 'Veterinary Science'],
+            ranking: 2
+        },
+        {
+            id: 'uct',
+            name: 'University of Cape Town',
+            location: 'Cape Town, Western Cape',
+            description: 'Internationally acclaimed university known for its academic excellence and research.',
+            minAPS: 35,
+            requiredSubjects: ['Mathematics', 'English Home Language'],
+            popularPrograms: ['Commerce', 'Engineering & Built Environment', 'Health Sciences'],
+            ranking: 1
+        },
+        {
+            id: 'wits',
+            name: 'University of the Witwatersrand',
+            location: 'Johannesburg, Gauteng',
+            description: 'A leading research-intensive university, committed to academic excellence and social justice.',
+            minAPS: 30,
+            requiredSubjects: ['Mathematics', 'English Home Language'],
+            popularPrograms: ['Engineering', 'Health Sciences', 'Humanities', 'Science'],
+            ranking: 3
+        },
+        {
+            id: 'um',
+            name: 'University of Mpumalanga',
+            location: 'Mbombela, Mpumalanga',
+            description: 'A new and growing university focused on agriculture, nature conservation, and hospitality.',
+            minAPS: 22,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Agriculture', 'Nature Conservation', 'Hospitality Management'],
+            ranking: 15
+        },
+        {
+            id: 'unisa',
+            name: 'University of South Africa (UNISA)',
+            location: 'Pretoria (Distance Learning)',
+            description: 'Africa\'s largest open distance learning institution, offering a wide range of qualifications.',
+            minAPS: 18,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Education', 'Business Administration', 'Law', 'Humanities'],
+            ranking: 20
+        },
+        {
+            id: 'uj',
+            name: 'University of Johannesburg',
+            location: 'Johannesburg, Gauteng',
+            description: 'A vibrant and diverse university offering a comprehensive range of academic programs.',
+            minAPS: 27,
+            requiredSubjects: ['English Home Language'],
+            popularPrograms: ['Engineering', 'Law', 'Humanities', 'Management'],
+            ranking: 4
+        }
+    ];
+
+    let rowCount = 0;
+
+    // Helper Functions
+    function getSelectedSubjects(currentRowSubjectSelect = null) {
+        const selected = new Set();
+        subjectsContainer.querySelectorAll('.subject-select').forEach(select => {
+            if (select !== currentRowSubjectSelect && select.value !== '') {
+                selected.add(select.value);
+            }
+        });
+        return selected;
+    }
+
+    function updateAllSubjectDropdowns() {
+        const allSubjectSelects = subjectsContainer.querySelectorAll('.subject-select');
+        const selectedSubjectsValues = Array.from(allSubjectSelects)
+            .map(select => select.value)
+            .filter(value => value !== '');
+
+        let actualHomeLanguageSelected = selectedSubjectsValues.some(sub => homeLanguageSubjects.includes(sub));
+        let actualAdditionalLanguageSelected = selectedSubjectsValues.some(sub => additionalLanguageSubjects.includes(sub));
+        let actualMathSelected = selectedSubjectsValues.some(sub => mathSubjects.includes(sub));
+
+        allSubjectSelects.forEach((currentSelect) => {
+            const currentRow = currentSelect.closest('.subject-row');
+            const currentRowIndex = Array.from(subjectsContainer.children).indexOf(currentRow);
+            const currentSelectedValue = currentSelect.value;
+            const selectedSubjectsInOtherDropdowns = getSelectedSubjects(currentSelect);
+
+            let allowedSubjectsForThisRow = [];
+
+            const isFirstRow = currentRowIndex === 0;
+            const isSecondRow = currentRowIndex === 1;
+            const isThirdRow = currentRowIndex === 2;
+            const isFourthRowOrBeyond = currentRowIndex >= 3;
+
+            if (isFirstRow) {
+                allowedSubjectsForThisRow = homeLanguageSubjects;
+            } else if (isSecondRow) {
+                allowedSubjectsForThisRow = additionalLanguageSubjects;
+            } else if (isThirdRow) {
+                allowedSubjectsForThisRow = mathSubjects;
+            } else {
+                allowedSubjectsForThisRow = allMatricSubjects;
+            }
+
+            while (currentSelect.options.length > 0) {
+                currentSelect.remove(0);
+            }
+
+            const placeholderOption = document.createElement('option');
+            placeholderOption.value = '';
+            placeholderOption.textContent = 'Select a subject';
+            placeholderOption.disabled = true;
+            placeholderOption.selected = (currentSelectedValue === '');
+            currentSelect.appendChild(placeholderOption);
+
+            allowedSubjectsForThisRow.forEach(subject => {
+                const option = document.createElement('option');
+                option.value = subject;
+                option.textContent = subject;
+
+                let disableOption = false;
+
+                if (selectedSubjectsInOtherDropdowns.has(subject)) {
+                    disableOption = true;
+                }
+
+                const isCurrentSubjectHomeLanguage = homeLanguageSubjects.includes(subject);
+                const isCurrentSubjectAdditionalLanguage = additionalLanguageSubjects.includes(subject);
+
+                if (isFourthRowOrBeyond) {
+                    if (actualHomeLanguageSelected && actualAdditionalLanguageSelected &&
+                        (isCurrentSubjectHomeLanguage || isCurrentSubjectAdditionalLanguage)) {
+                        disableOption = true;
+                    }
+                } else {
+                    if (isFirstRow) {
+                        if (isCurrentSubjectHomeLanguage && currentSelectedValue !== subject && actualHomeLanguageSelected) {
+                            const selectedHomeLanguageInOtherRow = Array.from(allSubjectSelects).some(s => s !== currentSelect && homeLanguageSubjects.includes(s.value));
+                            if (selectedHomeLanguageInOtherRow) disableOption = true;
+                        }
+                    } else if (isSecondRow) {
+                        if (isCurrentSubjectAdditionalLanguage && currentSelectedValue !== subject && actualAdditionalLanguageSelected) {
+                             const selectedAdditionalLanguageInOtherRow = Array.from(allSubjectSelects).some(s => s !== currentSelect && additionalLanguageSubjects.includes(s.value));
+                            if (selectedAdditionalLanguageInOtherRow) disableOption = true;
+                        }
+                    } else if (isThirdRow) {
+                        const isCurrentSubjectMath = mathSubjects.includes(subject);
+                        if (isCurrentSubjectMath && currentSelectedValue !== subject && actualMathSelected) {
+                            const selectedMathInOtherRow = Array.from(allSubjectSelects).some(s => s !== currentSelect && mathSubjects.includes(s.value));
+                            if (selectedMathInOtherRow) disableOption = true;
+                        }
+                    }
+                }
+
+                option.disabled = disableOption;
+
+                if (subject === currentSelectedValue) {
+                    option.selected = true;
+                    option.disabled = false;
+                }
+                currentSelect.appendChild(option);
+            });
+        });
+
+        const subjectRows = subjectsContainer.querySelectorAll('.subject-row');
+        const currentSelectionsForValidation = Array.from(subjectsContainer.querySelectorAll('.subject-select'))
+                                                .map(select => select.value)
+                                                .filter(val => val !== '');
+
+        let hasOneHomeLanguage = currentSelectionsForValidation.some(sub => homeLanguageSubjects.includes(sub));
+        let hasOneAdditionalLanguage = currentSelectionsForValidation.some(sub => additionalLanguageSubjects.includes(sub));
+        let hasOneMath = currentSelectionsForValidation.some(sub => mathSubjects.includes(sub));
+        let allRequiredSubjectsSelected = hasOneHomeLanguage && hasOneAdditionalLanguage && hasOneMath;
+
+        subjectRows.forEach((row, index) => {
+            const removeButton = row.querySelector('.delete-btn');
+            const subjectSelect = row.querySelector('.subject-select');
+            const selectedValue = subjectSelect.value;
+
+            const isThisRowHomeLanguage = homeLanguageSubjects.includes(selectedValue);
+            const isThisRowAdditionalLanguage = additionalLanguageSubjects.includes(selectedValue);
+            const isThisRowMath = mathSubjects.includes(selectedValue);
+
+            let shouldDisableRemove = false;
+
+            if (isThisRowHomeLanguage && currentSelectionsForValidation.filter(s => homeLanguageSubjects.includes(s)).length === 1) {
+                shouldDisableRemove = true;
+            }
+            if (isThisRowAdditionalLanguage && currentSelectionsForValidation.filter(s => additionalLanguageSubjects.includes(s)).length === 1) {
+                shouldDisableRemove = true;
+            }
+            if (isThisRowMath && currentSelectionsForValidation.filter(s => mathSubjects.includes(s)).length === 1) {
+                shouldDisableRemove = true;
+            }
+
+            removeButton.disabled = shouldDisableRemove;
+        });
+
+        const lastSubjectSelect = subjectsContainer.querySelector('.subject-row:last-child .subject-select');
+        const lastLevelSelect = subjectsContainer.querySelector('.subject-row:last-child .level-select');
+        const lastRowComplete = (lastSubjectSelect && lastSubjectSelect.value !== '' && lastLevelSelect && lastLevelSelect.value !== '');
+
+        const maxSubjects = 10;
+        const currentNumberOfRows = subjectsContainer.children.length;
+
+        addSubjectBtn.disabled = !(allRequiredSubjectsSelected && lastRowComplete && currentNumberOfRows < maxSubjects);
+    }
+
+    function calculateTotalApsScore() {
+        let total = 0;
+        document.querySelectorAll('.points-display').forEach(pointsElement => {
+            total += parseInt(pointsElement.textContent || '0');
+        });
+        totalApsScoreSpan.textContent = total;
+        return total;
+    }
+
+    function createSubjectRow() {
+        rowCount++;
+        const rowId = `subject-row-${rowCount}`;
+
+        const rowDiv = document.createElement('div');
+        rowDiv.classList.add('row', 'subject-row', 'g-2');
+        rowDiv.id = rowId;
+
+        const currentRowsInDOM = subjectsContainer.children.length;
+        if (currentRowsInDOM === 0) rowDiv.classList.add('home-language-row');
+        if (currentRowsInDOM === 1) rowDiv.classList.add('additional-language-row');
+        if (currentRowsInDOM === 2) rowDiv.classList.add('math-row');
+
+        let levelOptions = '<option value="" disabled selected>Select a Level</option>';
+        for (let i = 7; i >= 1; i--) {
+            levelOptions += `<option value="Level ${i}">Level ${i}</option>`;
+        }
+
+        rowDiv.innerHTML = `
+            <div class="col-md-4 col-12">
+                <select class="form-select subject-select" aria-label="Subject select">
+                    <option value="" disabled selected>Select a subject</option>
+                </select>
+            </div>
+            <div class="col-md-3 col-12">
+                <select class="form-select level-select" aria-label="Level select">
+                    ${levelOptions}
+                </select>
+            </div>
+            <div class="col-md-2 col-6 d-flex justify-content-center align-items-center">
+                <div class="points-display" data-row-id="${rowId}">0</div>
+            </div>
+            <div class="col-md-1 col-6 d-flex justify-content-end align-items-center">
+                <button type="button" class="delete-btn" aria-label="Delete subject">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        `;
+
+        subjectsContainer.appendChild(rowDiv);
+
+        const subjectSelect = rowDiv.querySelector('.subject-select');
+        const levelSelect = rowDiv.querySelector('.level-select');
+        const pointsDisplay = rowDiv.querySelector('.points-display');
+        const deleteButton = rowDiv.querySelector('.delete-btn');
+
+        function updateRowPoints() {
+            const selectedSubject = subjectSelect.value;
+            const selectedLevel = levelSelect.value;
+
+            if (selectedSubject === '' || selectedLevel === '') {
+                pointsDisplay.textContent = 0;
+            } else {
+                pointsDisplay.textContent = levelPoints[selectedLevel] !== undefined ? levelPoints[selectedLevel] : 0;
+            }
+            calculateTotalApsScore();
+            updateAllSubjectDropdowns();
+            duplicateSubjectError.style.display = 'none';
+        }
+
+        subjectSelect.addEventListener('change', (event) => {
+            const newlySelectedSubject = event.target.value;
+            const selectedSubjectsExcludingCurrent = getSelectedSubjects(subjectSelect);
+
+            if (newlySelectedSubject !== '' && selectedSubjectsExcludingCurrent.has(newlySelectedSubject)) {
+                duplicateSubjectError.style.display = 'block';
+                subjectSelect.value = '';
+            } else {
+                duplicateSubjectError.style.display = 'none';
+            }
+            updateRowPoints();
+        });
+
+        levelSelect.addEventListener('change', updateRowPoints);
+
+        deleteButton.addEventListener('click', () => {
+            rowDiv.remove();
+            calculateTotalApsScore();
+            updateAllSubjectDropdowns();
+            duplicateSubjectError.style.display = 'none';
+        });
+
+        updateAllSubjectDropdowns();
+        updateRowPoints();
+    }
+
+    function getPerformanceLevel(apsScore) {
+        if (apsScore >= 35) return 'Excellent';
+        if (apsScore >= 30) return 'Very Good';
+        if (apsScore >= 25) return 'Good';
+        if (apsScore >= 20) return 'Average';
+        return 'Below Average';
+    }
+
+    function renderUniversityCards(universitiesToRender, container, matchTypeClass) {
+        container.innerHTML = '';
+        if (universitiesToRender.length === 0) {
+            container.innerHTML = '<p class="text-muted text-center">No universities found in this category.</p>';
+            return;
+        }
+
+        universitiesToRender.forEach(uni => {
+            const card = document.createElement('div');
+            card.classList.add('university-card', `match-${matchTypeClass}`);
+            const apsDifference = calculateTotalApsScore() - uni.minAPS;
+            const apsDiffText = apsDifference >= 0 ? `+${apsDifference} above minimum` : `${apsDifference} below minimum`;
+            const apsDiffClass = apsDifference >= 0 ? 'text-success' : 'text-danger';
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <span class="ranking"><i class="fas fa-star"></i> Ranking #${uni.ranking}</span>
+                    <span class="match-badge">${matchTypeClass === 'perfect' ? 'Perfect Match' : (matchTypeClass === 'good' ? 'Good Match' : 'Other')}</span>
+                </div>
+                <h4>${uni.name}</h4>
+                <div class="location"><i class="fas fa-map-marker-alt"></i> ${uni.location}</div>
+                <p class="description">${uni.description}</p>
+                <div class="aps-info">
+                    <i class="fas fa-graduation-cap"></i> Minimum APS: <span class="aps-value">${uni.minAPS}</span>
+                    <span class="aps-difference ${apsDiffClass}">${apsDiffText}</span>
+                </div>
+                <div class="subject-info">
+                    <i class="fas fa-book"></i> Required Subjects: ${uni.requiredSubjects.join(', ')}
+                </div>
+                <div class="program-info">
+                    <i class="fas fa-flask"></i> Popular Programs:
+                    <div class="programs-list ms-2">
+                        ${uni.popularPrograms.map(p => `<span>${p}</span>`).join('')}
+                        ${uni.popularPrograms.length > 2 ? `<span>+${uni.popularPrograms.length - 2} more</span>` : ''}
+                    </div>
+                </div>
+                <button class="btn btn-primary learn-more-btn">Learn More</button>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function hideAllPages() {
+        formPage.style.display = 'none';
+        recommendationsPage.style.display = 'none';
+        improveGradesPage.style.display = 'none';
+        applicationChecklistPage.style.display = 'none';
+        faqsPage.style.display = 'none';
+        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    }
+
+    function showPage(pageToShow, activeNavLink) {
+        hideAllPages();
+        pageToShow.style.display = 'block';
+        if (activeNavLink) {
+            activeNavLink.classList.add('active');
+        }
+    }
+
+    // Initial Setup
+    hideAllPages();
+    formPage.style.display = 'block';
+    navCalculator.classList.add('active');
+
+    // Create initial subject rows
+    createSubjectRow();
+    createSubjectRow();
+    createSubjectRow();
+    updateAllSubjectDropdowns();
+
+    // Event Listeners
+    addSubjectBtn.addEventListener('click', createSubjectRow);
+
+    recommendationsBtn.addEventListener('click', () => {
+        const subjectRows = subjectsContainer.querySelectorAll('.subject-row');
+        let completeSubjectsCount = 0;
+        const currentSelectedSubjects = new Set();
+        let homeLanguageCount = 0;
+        let additionalLanguageCount = 0;
+        let mathSubjectCount = 0;
+        let validationErrors = [];
+
+        subjectRows.forEach(row => {
+            const subjectSelect = row.querySelector('.subject-select');
+            const levelSelect = row.querySelector('.level-select');
+            if (subjectSelect.value !== '' && levelSelect.value !== '') {
+                completeSubjectsCount++;
+                const selectedSubject = subjectSelect.value;
+                currentSelectedSubjects.add(selectedSubject);
+
+                if (homeLanguageSubjects.includes(selectedSubject)) {
+                    homeLanguageCount++;
+                } else if (additionalLanguageSubjects.includes(selectedSubject)) {
+                    additionalLanguageCount++;
+                }
+
+                if (mathSubjects.includes(selectedSubject)) {
+                    mathSubjectCount++;
+                }
+            }
+        });
+
+        if (completeSubjectsCount < 7) {
+            validationErrors.push('Please select at least 7 subjects with their levels.');
+        }
+        if (homeLanguageCount === 0) {
+            validationErrors.push('You must select exactly one Home Language.');
+        } else if (homeLanguageCount > 1) {
+            validationErrors.push('You can only select one Home Language.');
+        }
+        if (additionalLanguageCount === 0) {
+            validationErrors.push('You must select exactly one First Additional Language.');
+        } else if (additionalLanguageCount > 1) {
+            validationErrors.push('You can only select one First Additional Language.');
+        }
+        if (mathSubjectCount === 0) {
+            validationErrors.push('You must select either Mathematics, Mathematical Literacy, or Technical Mathematics.');
+        } else if (mathSubjectCount > 1) {
+            validationErrors.push('You can only select one type of Mathematics subject.');
+        }
+
+        if (validationErrors.length > 0) {
+            recommendationsErrorMessage.innerHTML = validationErrors.map(err => `<div><i class="fas fa-exclamation-circle me-2"></i>${err}</div>`).join('');
+            recommendationsErrorMessage.style.display = 'block';
+            formPage.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            recommendationsErrorMessage.style.display = 'none';
+
+            const totalAPS = calculateTotalApsScore();
+            const performanceLevel = getPerformanceLevel(totalAPS);
+
+            if (performanceLevel === 'Below Average') {
+                summaryApsScoreImprove.textContent = totalAPS;
+                summarySubjectsEnteredImprove.textContent = completeSubjectsCount;
+                summaryPerformanceLevelImprove.textContent = performanceLevel;
+
+                summaryApsScoreImprove.classList.add('text-danger');
+                summarySubjectsEnteredImprove.classList.add('text-danger');
+                summaryPerformanceLevelImprove.classList.add('text-danger');
+
+                showPage(improveGradesPage, navImproveGrades);
+                return;
+            }
+
+            summaryApsScore.textContent = totalAPS;
+            summaryPerformanceLevel.textContent = performanceLevel;
+
+            summaryPerformanceLevel.classList.remove(
+                'performance-excellent',
+                'performance-very-good',
+                'performance-good',
+                'performance-average',
+                'performance-below-average',
+                'text-danger'
+            );
+
+            if (performanceLevel === 'Excellent') {
+                summaryPerformanceLevel.classList.add('performance-excellent');
+            } else if (performanceLevel === 'Very Good') {
+                summaryPerformanceLevel.classList.add('performance-very-good');
+            } else if (performanceLevel === 'Good') {
+                summaryPerformanceLevel.classList.add('performance-good');
+            } else if (performanceLevel === 'Average') {
+                summaryPerformanceLevel.classList.add('performance-average');
+            }
+
+            summarySubjectsEntered.textContent = completeSubjectsCount;
+
+            const perfectMatches = [];
+            const goodMatches = [];
+            const otherMatches = [];
+
+            universities.forEach(uni => {
+                const hasAllRequiredSubjects = uni.requiredSubjects.every(reqSub => 
+                    currentSelectedSubjects.has(reqSub)
+                );
+
+                const hasAtLeastOneRequiredSubject = uni.requiredSubjects.some(reqSub =>
+                    currentSelectedSubjects.has(reqSub)
+                );
+
+                const apsDifference = totalAPS - uni.minAPS;
+
+                if (hasAllRequiredSubjects) {
+                    if (apsDifference >= 5) {
+                        perfectMatches.push(uni);
+                    } else if (apsDifference >= 0) {
+                        goodMatches.push(uni);
+                    } else if (apsDifference >= -5) {
+                        otherMatches.push(uni);
+                    }
+                } else if (hasAtLeastOneRequiredSubject) {
+                    if (apsDifference >= 5) {
+                        goodMatches.push(uni);
+                    } else if (apsDifference >= 0) {
+                        otherMatches.push(uni);
+                    }
+                } else if (apsDifference >= 10) {
+                    otherMatches.push(uni);
+                }
+            });
+
+            perfectMatches.sort((a, b) => a.ranking - b.ranking);
+            goodMatches.sort((a, b) => a.ranking - b.ranking);
+            otherMatches.sort((a, b) => a.ranking - b.ranking);
+
+            renderUniversityCards(perfectMatches, perfectMatchesContainer, 'perfect');
+            renderUniversityCards(goodMatches, goodMatchesContainer, 'good');
+            renderUniversityCards(otherMatches, otherMatchesContainer, 'other');
+
+            perfectMatchesCount.textContent = `${perfectMatches.length} universities`;
+            goodMatchesCount.textContent = `${goodMatches.length} universities`;
+            otherMatchesCount.textContent = `${otherMatches.length} universities`;
+
+            showPage(recommendationsPage, navRecommendations);
+        }
+    });
+
+    // Navigation Event Listeners
+    [backToFormBtnRecs, backToFormBtnImprove, backToFormBtnChecklist, backToFormBtnFaqs].forEach(btn => {
+        if (btn) {
+            btn.addEventListener('click', () => {
+                showPage(formPage, navCalculator);
+            });
+        }
+    });
+
+    navCalculator.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage(formPage, navCalculator);
+    });
+
+    navRecommendations.addEventListener('click', (e) => {
+        e.preventDefault();
+        recommendationsBtn.click();
+    });
+
+    navApplicationChecklist.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage(applicationChecklistPage, navApplicationChecklist);
+    });
+
+    navFaqs.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage(faqsPage, navFaqs);
+    });
+
+    if (navImproveGrades) {
+        navImproveGrades.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage(improveGradesPage, navImproveGrades);
+        });
+    }
+});
