@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'Tourism',
         'Mechanical Technology',
         'Maritime Economics',
+        'Life orientation'
     ].sort();
 
     const homeLanguageSubjects = allMatricSubjects.filter(sub => sub.includes('Home Language'));
@@ -128,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Potchefstroom, North West',
             description: 'Multi-campus university with strong programs in business, education, and health sciences.',
             minAPS: 26,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Mathematics', 'Accounting', 'Physical Sciences'],
             popularPrograms: ['Business', 'Education', 'Health Sciences'],
             ranking: 7
         },
@@ -138,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Bloemfontein, Free State',
             description: 'Comprehensive university with strong community engagement and diverse programs.',
             minAPS: 24,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Life Sciences', 'Mathematics', 'Accounting'],
             popularPrograms: ['Health Sciences', 'Natural Sciences', 'Humanities'],
             ranking: 8
         },
@@ -148,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Durban, KwaZulu-Natal',
             description: 'Technology university offering practical, industry-focused programs.',
             minAPS: 20,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Physical Sciences', 'Mathematics', 'Life Sciences'],
             popularPrograms: ['Applied Sciences', 'Arts & Design', 'Engineering'],
             ranking: 10
         },
@@ -158,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Makhanda, Eastern Cape',
             description: 'Small, prestigious university known for academic excellence and vibrant campus life.',
             minAPS: 30,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Accounting', 'Mathematics', 'Life Sciences'],
             popularPrograms: ['Humanities', 'Science', 'Commerce'],
             ranking: 5
         },
@@ -168,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Durban, KwaZulu-Natal',
             description: 'Major university with strong research focus and diverse academic offerings.',
             minAPS: 28,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Physical Sciences', 'Accounting', 'Life Sciences'],
             popularPrograms: ['Medicine', 'Engineering', 'Law'],
             ranking: 6
         },
@@ -178,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Pretoria, Gauteng',
             description: 'One of South Africa\'s leading research universities, offering a wide range of programs.',
             minAPS: 32,
-            requiredSubjects: ['Mathematics', 'Physical Sciences', 'English Home Language'],
+            requiredSubjects: ['Mathematics', 'Physical Sciences', 'English Home Language', 'Life Sciences'],
             popularPrograms: ['Engineering', 'Law', 'Medicine', 'Veterinary Science'],
             ranking: 2
         },
@@ -188,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Cape Town, Western Cape',
             description: 'Internationally acclaimed university known for its academic excellence and research.',
             minAPS: 35,
-            requiredSubjects: ['Mathematics', 'English Home Language'],
+            requiredSubjects: ['Mathematics', 'English Home Language', 'Accounting', 'Physical Sciences'],
             popularPrograms: ['Commerce', 'Engineering & Built Environment', 'Health Sciences'],
             ranking: 1
         },
@@ -198,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Johannesburg, Gauteng',
             description: 'A leading research-intensive university, committed to academic excellence and social justice.',
             minAPS: 30,
-            requiredSubjects: ['Mathematics', 'English Home Language'],
+            requiredSubjects: ['Mathematics', 'English Home Language', 'Life Sciences', 'Physical Sciences'],
             popularPrograms: ['Engineering', 'Health Sciences', 'Humanities', 'Science'],
             ranking: 3
         },
@@ -208,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Mbombela, Mpumalanga',
             description: 'A new and growing university focused on agriculture, nature conservation, and hospitality.',
             minAPS: 22,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Mathematics', 'Accounting', 'Life Sciences'],
             popularPrograms: ['Agriculture', 'Nature Conservation', 'Hospitality Management'],
             ranking: 15
         },
@@ -218,7 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Pretoria (Distance Learning)',
             description: 'Africa\'s largest open distance learning institution, offering a wide range of qualifications.',
             minAPS: 18,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Physical Sciences', 'Mathematics', 'Accounting'],
             popularPrograms: ['Education', 'Business Administration', 'Law', 'Humanities'],
             ranking: 20
         },
@@ -228,7 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             location: 'Johannesburg, Gauteng',
             description: 'A vibrant and diverse university offering a comprehensive range of academic programs.',
             minAPS: 27,
-            requiredSubjects: ['English Home Language'],
+            requiredSubjects: ['English Home Language', 'Life Sciences', 'Mathematics', 'Physical Sciences'],
             popularPrograms: ['Engineering', 'Law', 'Humanities', 'Management'],
             ranking: 4
         }
@@ -684,17 +685,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-                // For universities with fewer than 3 required subjects, require all required subjects at level 5+
-                let isPerfectMatch = false;
-                if (uni.requiredSubjects.length < 3) {
-                    // All required subjects must be present at level 5+
-                    isPerfectMatch = uni.requiredSubjects.every(reqSub => {
-                        return selectedSubjectsWithLevels.some(sel => sel.subject === reqSub && parseInt(sel.level.replace('Level ', '')) >= 5);
-                    });
-                } else {
-                    // At least 3 required subjects at level 5+
-                    isPerfectMatch = matchCount >= 3;
-                }
+                // For all universities, require at least 3 required subjects at level 5+
+                let isPerfectMatch = matchCount >= 3;
 
                 const apsDifference = totalAPS - uni.minAPS;
 
