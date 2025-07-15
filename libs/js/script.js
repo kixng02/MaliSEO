@@ -381,7 +381,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const maxSubjects = 10;
         const currentNumberOfRows = subjectsContainer.children.length;
 
-        addSubjectBtn.disabled = !(allRequiredSubjectsSelected && lastRowComplete && currentNumberOfRows < maxSubjects);
+        // Enable add button if last row is complete and less than max subjects
+        addSubjectBtn.disabled = !(lastRowComplete && currentNumberOfRows < maxSubjects);
     }
 
     function calculateTotalApsScore() {
@@ -551,9 +552,7 @@ document.addEventListener('DOMContentLoaded', () => {
     formPage.style.display = 'block';
     navCalculator.classList.add('active');
 
-    // Create initial subject rows
-    createSubjectRow();
-    createSubjectRow();
+    // Create initial subject row
     createSubjectRow();
     updateAllSubjectDropdowns();
 
@@ -655,22 +654,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
             summarySubjectsEntered.textContent = completeSubjectsCount;
 
+
             const perfectMatches = [];
             const goodMatches = [];
             const otherMatches = [];
 
             universities.forEach(uni => {
-                const hasAllRequiredSubjects = uni.requiredSubjects.every(reqSub => 
-                    currentSelectedSubjects.has(reqSub)
-                );
+                // Find selected subjects and their levels for this university
+                const selectedSubjectsWithLevels = [];
+                subjectRows.forEach(row => {
+                    const subjectSelect = row.querySelector('.subject-select');
+                    const levelSelect = row.querySelector('.level-select');
+                    if (subjectSelect.value !== '' && levelSelect.value !== '') {
+                        selectedSubjectsWithLevels.push({
+                            subject: subjectSelect.value,
+                            level: levelSelect.value
+                        });
+                    }
+                });
 
-                const hasAtLeastOneRequiredSubject = uni.requiredSubjects.some(reqSub =>
-                    currentSelectedSubjects.has(reqSub)
-                );
+                // Count how many selected subjects match the university's required subjects and have level >= 5
+                let matchCount = 0;
+                selectedSubjectsWithLevels.forEach(sel => {
+                    if (uni.requiredSubjects.includes(sel.subject)) {
+                        const levelNum = parseInt(sel.level.replace('Level ', ''));
+                        if (levelNum >= 5) {
+                            matchCount++;
+                        }
+                    }
+                });
+
+                // For universities with fewer than 3 required subjects, require all required subjects at level 5+
+                let isPerfectMatch = false;
+                if (uni.requiredSubjects.length < 3) {
+                    // All required subjects must be present at level 5+
+                    isPerfectMatch = uni.requiredSubjects.every(reqSub => {
+                        return selectedSubjectsWithLevels.some(sel => sel.subject === reqSub && parseInt(sel.level.replace('Level ', '')) >= 5);
+                    });
+                } else {
+                    // At least 3 required subjects at level 5+
+                    isPerfectMatch = matchCount >= 3;
+                }
 
                 const apsDifference = totalAPS - uni.minAPS;
 
-                if (hasAllRequiredSubjects) {
+                if (isPerfectMatch) {
                     if (apsDifference >= 5) {
                         perfectMatches.push(uni);
                     } else if (apsDifference >= 0) {
@@ -678,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else if (apsDifference >= -5) {
                         otherMatches.push(uni);
                     }
-                } else if (hasAtLeastOneRequiredSubject) {
+                } else if (matchCount > 0) {
                     if (apsDifference >= 5) {
                         goodMatches.push(uni);
                     } else if (apsDifference >= 0) {
