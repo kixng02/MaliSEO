@@ -4,11 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>University Admission Tool - South Africa</title>
-    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96SAx96" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <!-- FontAwesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- Favicon using FontAwesome graduation cap SVG as data URI -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 640 512'%3E%3Cpath fill='%23610DDE' d='M622.34 153.2 343.4 37.5c-15.9-6.4-33.8-6.4-49.7 0L17.66 153.2c-23.6 9.5-23.6 42.3 0 51.8l58.1 23.4c-1.1 6.6-1.7 13.3-1.7 20v61.1c0 13.3 7.8 25.3 19.8 30.6l197.5 85.7c13.2 5.7 28.1 5.7 41.3 0l197.5-85.7c12-5.2 19.8-17.2 19.8-30.6v-61.1c0-6.7-.6-13.4-1.7-20l58.1-23.4c23.6-9.5 23.6-42.3 0-51.8zM320 80c4.1 0 8.2.8 12.1 2.4l278.9 115.7c7.6 3.2 7.6 13.8 0 17L332.1 330.8c-7.6 3.2-16.6 3.2-24.2 0L29.05 215.1c-7.6-3.2-7.6-13.8 0-17L308 82.4c3.9-1.6 8-2.4 12-2.4zm208 246.7c0 4.7-2.8 8.9-7.1 10.8l-197.5 85.7c-4.2 1.8-8.9 1.8-13.1 0l-197.5-85.7c-4.3-1.9-7.1-6.1-7.1-10.8v-61.1c0-4.7 2.8-8.9 7.1-10.8l197.5-85.7c4.2-1.8 8.9-1.8 13.1 0l197.5 85.7c4.3 1.9 7.1 6.1 7.1 10.8v61.1z'/%3E%3C/svg%3E"/>
     
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
@@ -20,10 +19,12 @@
 </head>
 <body>
 <!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="/">University Admission Calculator</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">
+            <i class="fas fa-graduation-cap me-2"></i> University Admission Calculator
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">

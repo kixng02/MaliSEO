@@ -749,10 +749,77 @@ document.addEventListener('DOMContentLoaded', () => {
         showPage(applicationChecklistPage, navApplicationChecklist);
     });
 
-    navFaqs.addEventListener('click', (e) => {
-        e.preventDefault();
-        showPage(faqsPage, navFaqs);
+navFaqs.addEventListener('click', (e) => {
+    e.preventDefault();
+    // Render new FAQ content dynamically
+    faqsPage.innerHTML = [
+        '<div class="faq-hero">',
+        '  <i class="fas fa-graduation-cap fa-2x" style="color:var(--primary);"></i>',
+        '  <h1>Frequently Asked Questions</h1>',
+        '  <p>Find answers to common questions about university admissions, APS scores, and using this tool.</p>',
+        '</div>',
+        '<div class="faq-list">',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-question-circle me-2"></i>What is an APS score?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-info-circle me-2"></i>The Admission Point Score (APS) is a system used by South African universities to evaluate applicants. Your matric subject results are converted into points, and the total points determine your APS score. Each university and program will have a minimum APS requirement.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-calculator me-2"></i>How is my APS score calculated?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-equals me-2"></i>APS is calculated by assigning points to your matric subject levels (e.g., Level 7 = 7 points, Level 6 = 6 points, etc.). The total points from your best 6 or 7 subjects (excluding Life Orientation) are summed up to give your final APS. Specific calculations may vary per university.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-exclamation-triangle me-2"></i>What if my APS score is too low for my desired course?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-lightbulb me-2"></i>You can explore alternative options such as bridging courses, higher certificates, or diplomas. You may also rewrite certain matric subjects to improve your levels. This app provides study tips for improvement.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-calendar-alt me-2"></i>When should I apply to universities?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-clock me-2"></i>Application periods vary by university, but generally, applications open in April/May and close between June and September of the year preceding your desired enrollment. Always check specific deadlines for each institution and program.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-money-check-alt me-2"></i>Do I need to apply for financial aid separately?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-hand-holding-usd me-2"></i>Yes, financial aid (like NSFAS or university-specific bursaries) usually requires a separate application. Apply as early as possible, often concurrently with your university application.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-laptop-code me-2"></i>How do I use this tool?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-mouse-pointer me-2"></i>Enter your subjects and levels, then click "Get Recommendations" to see which universities you qualify for. The tool will also suggest ways to improve your APS score.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-user-graduate me-2"></i>What are popular programs at South African universities?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-university me-2"></i>Popular programs include Engineering, Medicine, Law, Commerce, Education, and Health Sciences. Each university has its own strengths and specialties.</div>',
+        '  </div>',
+        '  <div class="faq-item">',
+        '    <div class="faq-question"><span><i class="fas fa-envelope-open-text me-2"></i>Who can I contact for more help?</span><i class="fas fa-chevron-down"></i></div>',
+        '    <div class="faq-answer"><i class="fas fa-envelope me-2"></i>Contact the admissions office of your chosen university, or reach out to us via the contact form on the main page.</div>',
+        '  </div>',
+        '</div>'
+    ].join('');
+    showPage(faqsPage, navFaqs);
+    // FAQ accordion logic
+    faqsPage.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            const isOpen = answer.classList.contains('show');
+            faqsPage.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('show'));
+            faqsPage.querySelectorAll('.faq-question').forEach(q => q.classList.remove('active'));
+            if (!isOpen) {
+                answer.classList.add('show');
+                this.classList.add('active');
+            }
+        });
     });
+    faqsPage.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', function() {
+            const answer = this.nextElementSibling;
+            const isOpen = answer.classList.contains('show');
+            faqsPage.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('show'));
+            faqsPage.querySelectorAll('.faq-question').forEach(q => q.classList.remove('active'));
+            if (!isOpen) {
+                answer.classList.add('show');
+                this.classList.add('active');
+            }
+        });
+    });
+});
 
     if (navImproveGrades) {
         navImproveGrades.addEventListener('click', (e) => {

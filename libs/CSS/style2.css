@@ -1,3 +1,62 @@
+/* FAQ Section Styling */
+.faqs-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px 0;
+}
+.faq-item {
+  border-bottom: 1px solid #eee;
+  padding: 16px 0;
+}
+.faq-question {
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--primary);
+  font-size: 1.1rem;
+  transition: color 0.2s;
+}
+.faq-question.collapsed {
+  color: #333;
+}
+.faq-question i {
+  margin-left: 8px;
+  transition: transform 0.3s;
+}
+.faq-question:not(.collapsed) i {
+  transform: rotate(180deg);
+  color: var(--primary);
+}
+.faq-answer {
+  padding: 12px 0 0 0;
+  color: #444;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+.faqs-page {
+  width: 100%;
+  padding: 0 16px;
+}
+/* Error message alignment for recommendationsErrorMessage */
+.error-message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.error-message-container > div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8d7da;
+  color: #842029;
+  border-radius: 6px;
+  font-size: 1rem;
+}
 /*landing page*/
         :root {
             --primary: #610DDE;
@@ -10,13 +69,53 @@
         /* Navbar Styling */
 .navbar {
     box-shadow: 0 2px 10px rgba(241, 239, 239, 0.1);
+    border-radius: 16px;
+    margin-top: 16px;
+    margin-bottom: 0;
+    background: #fff;
+    padding: 0.5rem 1.5rem;
 }
 .navbar-brand {
     font-weight: 700;
+    color: var(--primary) !important;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+}
+.navbar-brand i {
+    color: var(--primary) !important;
+    font-size: 1.5rem;
+    margin-right: 8px;
 }
 .nav-link {
     font-weight: 500;
     margin-left: 15px;
+    color: #333 !important;
+    position: relative;
+    transition: color 0.2s;
+}
+.nav-link.active,
+.nav-link:focus,
+.nav-link:hover {
+    color: var(--primary) !important;
+}
+.nav-link.active::after,
+.nav-link:focus::after,
+.nav-link:hover::after {
+    width: 100%;
+    background: var(--primary);
+}
+.nav-link::after {
+    content: "";
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: var(--primary);
+    border-radius: 2px;
+    transition: width 0.3s cubic-bezier(.4,0,.2,1);
 }
         body {
             font-family: 'Inter', sans-serif;
